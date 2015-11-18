@@ -63,7 +63,9 @@
                     Text="{x:Bind Title}"/>
 
                 <ScrollViewer
-                    Grid.Row="1">
+                    Grid.Row="1"
+                    VerticalScrollBarVisibility="Auto"
+                    HorizontalScrollBarVisibility="Auto">
                     <StackPanel>
                         <TextBlock
                             Visibility="Collapsed"

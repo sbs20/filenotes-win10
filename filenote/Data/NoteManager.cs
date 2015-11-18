@@ -39,5 +39,12 @@ namespace Sbs20.Filenote.Data
             var notes = await GetAllItemsAsync();
             return notes.Where(n => n.FullName == id).FirstOrDefault();
         }
+
+        public static async Task SaveNoteAsync(Note note)
+        {
+            var folder = await Settings.GetStorageFolderAsync();
+            var file = await folder.GetFileAsync(note.FullName);
+            await FileIO.WriteTextAsync(file, note.Text);
+        }
     }
 }

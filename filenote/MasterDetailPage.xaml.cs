@@ -44,7 +44,7 @@ namespace Sbs20.Filenote
                     .Where((item) => item.FullName == id)
                     .FirstOrDefault();
             }
-            
+
             UpdateForVisualState(AdaptiveStates.CurrentState);
 
             // Don't play a content transition for first item load.
@@ -111,17 +111,21 @@ namespace Sbs20.Filenote
             }
         }
 
-        private void NoteText_LostFocus(object sender, RoutedEventArgs e)
+        private async void NoteText_LostFocus(object sender, RoutedEventArgs e)
         {
             // Do saves
+            var notes = (IList<NoteViewModel>)this.MasterListView.ItemsSource;
+            await NoteViewModel.SaveNotesViewModelsAsync(notes);
         }
 
         private void NoteText_TextChanged(object sender, RoutedEventArgs e)
         {
             var textBox = (TextBox)sender;
             var note = (NoteViewModel)textBox.DataContext;
-            note.Text = textBox.Text;
-            note.IsDirty = true;
+            if (note != null)
+            {
+                note.Text = textBox.Text;
+            }
         }
     }
 }
