@@ -1,16 +1,46 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.ComponentModel;
 using System.Threading.Tasks;
 using Sbs20.Filenote.Data;
 using Windows.Globalization.DateTimeFormatting;
 
 namespace Sbs20.Filenote.ViewModels
 {
-    public class NoteViewModel
+    public class NoteViewModel : System.ComponentModel.INotifyPropertyChanged
     {
         private string originalContent;
 
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected void OnPropertyChanged(string property)
+        {
+            if (this.PropertyChanged != null)
+            {
+                this.PropertyChanged(this, new PropertyChangedEventArgs(property));
+            }
+        }
+
         public string FullName { get; private set; }
+        public string Title { get; set; }
+        public string Text { get; set; }
+        public DateTime DateCreated { get; set; }
+
+        public NoteViewModel()
+        {
+        }
+
+        public static NoteViewModel Create(Note note)
+        {
+            return new NoteViewModel()
+            {
+                FullName = note.FullName,
+                DateCreated = note.DateCreated,
+                Title = note.Title,
+                Text = note.Text,
+                originalContent = note.Text
+            };
+        }
+
 
         public string DateCreatedHourMinute
         {
@@ -29,29 +59,9 @@ namespace Sbs20.Filenote.ViewModels
             }
         }
 
-        public string Title { get; set; }
-        public string Text { get; set; }
-        public DateTime DateCreated { get; set; }
-
         public bool IsDirty
         {
             get { return this.originalContent != this.Text; }
-        }
-
-        public NoteViewModel()
-        {
-        }
-
-        public static NoteViewModel FromNote(Note note)
-        {
-            return new NoteViewModel()
-            {
-                FullName = note.FullName,
-                DateCreated = note.DateCreated,
-                Title = note.Title,
-                Text = note.Text,
-                originalContent = note.Text
-            };
         }
 
         public Note ToNote()
@@ -69,17 +79,12 @@ namespace Sbs20.Filenote.ViewModels
         {
             if (this.IsDirty)
             {
-                await NoteManager.SaveNoteAsync(this.ToNote());
+                var save = NoteManager.SaveNoteAsync(this.ToNote());
                 this.originalContent = this.Text;
+                this.OnPropertyChanged("Text");
+                await save;
             }
         }
 
-        public static async Task SaveNotesViewModelsAsync(IEnumerable<NoteViewModel> notes)
-        {
-            foreach (var note in notes)
-            {
-                await note.SyncNoteViewModelAsync();
-            }
-        }
     }
 }

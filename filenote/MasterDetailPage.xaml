@@ -28,10 +28,11 @@
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
 
-                <TextBlock Text="{x:Bind Title}" Style="{ThemeResource BaseTextBlockStyle}" />
+                <TextBlock Text="{x:Bind Title}" Style="{ThemeResource BaseTextBlockStyle}" Name="titleBlock" />
+                <TextBox Text="{x:Bind Title}" Name="titleBox" Visibility="Collapsed" />
 
                 <TextBlock
-                    Text="{x:Bind Text}"
+                    Text="{x:Bind Text, Mode=OneWay}"
                     Grid.Row="1"
                     MaxLines="1"
                     Style="{ThemeResource ListBodyTextBlockStyle}" />
@@ -75,6 +76,8 @@
                             Text="{x:Bind Text}" />
 
                         <TextBox 
+                            Padding="0"
+                            BorderThickness="0"
                             FontFamily="Consolas"
                             Visibility="Visible"
                             HorizontalAlignment="Stretch"
@@ -133,7 +136,8 @@
             ItemContainerTransitions="{x:Null}"
             ItemTemplate="{StaticResource MasterListViewItemTemplate}"
             IsItemClickEnabled="True"
-            ItemClick="MasterListView_ItemClick">
+            ItemClick="MasterListView_ItemClick"
+            KeyDown="MasterListView_KeyDown">
             <ListView.ItemContainerStyle>
                 <Style TargetType="ListViewItem">
                     <Setter Property="HorizontalContentAlignment" Value="Stretch" />
