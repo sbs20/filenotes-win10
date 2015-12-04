@@ -126,7 +126,7 @@
         </Grid.ColumnDefinitions>
 
         <TextBlock
-            Text="My Items"
+            Text="Notes"
             Margin="12,8,8,8"
             Style="{ThemeResource TitleTextBlockStyle}" />
 

@@ -52,7 +52,6 @@ namespace Sbs20.Filenote
             this.Loaded += (sender, args) =>
             {
                 Current = this;
-
                 this.TogglePaneButton.Focus(FocusState.Programmatic);
             };
 

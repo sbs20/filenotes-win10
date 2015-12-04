@@ -45,7 +45,7 @@
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
                         <Setter Target="RootSplitView.DisplayMode" Value="CompactInline"/>
-                        <Setter Target="RootSplitView.IsPaneOpen" Value="True"/>
+                        <Setter Target="RootSplitView.IsPaneOpen" Value="False"/>
                     </VisualState.Setters>
                 </VisualState>
                 <VisualState>
