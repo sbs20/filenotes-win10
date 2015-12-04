@@ -1,12 +1,8 @@
-﻿using System;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Sbs20.Filenote.Data;
-using System.Collections;
 
 namespace Sbs20.Filenote.ViewModels
 {
