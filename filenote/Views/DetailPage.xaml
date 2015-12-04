@@ -1,5 +1,5 @@
 ﻿<Page
-    x:Class="Sbs20.Filenote.DetailPage"
+    x:Class="Sbs20.Filenote.Views.DetailPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:Sbs20.Filenote"

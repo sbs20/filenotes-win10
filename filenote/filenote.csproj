@@ -102,11 +102,11 @@
     <Compile Include="Data\Note.cs" />
     <Compile Include="Data\NoteManager.cs" />
     <Compile Include="Data\Settings.cs" />
-    <Compile Include="DetailPage.xaml.cs">
+    <Compile Include="Views\DetailPage.xaml.cs">
       <DependentUpon>DetailPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Extensions\XamlDependencyObjectExtension.cs" />
-    <Compile Include="MasterDetailPage.xaml.cs">
+    <Compile Include="Views\MasterDetailPage.xaml.cs">
       <DependentUpon>MasterDetailPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -134,11 +134,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Page Include="DetailPage.xaml">
+    <Page Include="Views\DetailPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="MasterDetailPage.xaml">
+    <Page Include="Views\MasterDetailPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

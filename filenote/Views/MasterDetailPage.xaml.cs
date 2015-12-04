@@ -10,7 +10,7 @@ using Windows.UI.Xaml.Navigation;
 using Sbs20.Filenote.ViewModels;
 using Sbs20.Filenote.Extensions;
 
-namespace Sbs20.Filenote
+namespace Sbs20.Filenote.Views
 {
     public sealed partial class MasterDetailPage : Page
     {

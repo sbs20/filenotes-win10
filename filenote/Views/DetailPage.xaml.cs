@@ -6,7 +6,7 @@ using Windows.UI.Xaml.Navigation;
 using Sbs20.Filenote.Data;
 using Sbs20.Filenote.ViewModels;
 
-namespace Sbs20.Filenote
+namespace Sbs20.Filenote.Views
 {
     public sealed partial class DetailPage : Page
     {
