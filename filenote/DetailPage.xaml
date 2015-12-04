@@ -33,7 +33,7 @@
                 Margin="8,0"
                 Style="{ThemeResource TitleTextBlockStyle}"
                 HorizontalAlignment="Left"
-                Text="{x:Bind Item.Title, Mode=OneWay}" />
+                Text="{x:Bind Note.Title, Mode=OneWay}" />
         </StackPanel>
 
         <TextBlock
@@ -41,7 +41,7 @@
             HorizontalAlignment="Left"
             MaxWidth="560"
             Style="{ThemeResource BodyTextBlockStyle}"
-            Text="{x:Bind Item.Text, Mode=OneWay}"
+            Text="{x:Bind Note.Text, Mode=OneWay}"
             EntranceNavigationTransitionInfo.IsTargetElement="True" />
     </StackPanel>
 </Page>
