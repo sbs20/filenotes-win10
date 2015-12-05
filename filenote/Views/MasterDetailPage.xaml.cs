@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Windows.System;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -24,15 +26,17 @@ namespace Sbs20.Filenote.Views
 
             if (this.MasterListView.ItemsSource == null)
             {
-                this.MasterListView.ItemsSource = await NoteCollectionViewModel.LoadAsync();
+                NoteCollectionViewModel items = await NoteCollectionViewModel.LoadAsync();
+                items.IsListening = true;
+                this.MasterListView.ItemsSource = items;
             }
 
             if (e.Parameter != null)
             {
-                // Parameter is item ID
-                var id = (string)e.Parameter;
+                // Parameter is item name
+                var fullName = (string)e.Parameter;
                 this.lastSelectedNote = ((NoteCollectionViewModel)this.MasterListView.ItemsSource)
-                    .Where((item) => item.FullName == id)
+                    .Where((item) => item.FullName == fullName)
                     .FirstOrDefault();
             }
 
@@ -70,15 +74,22 @@ namespace Sbs20.Filenote.Views
             var clickedItem = (NoteViewModel)e.ClickedItem;
             lastSelectedNote = clickedItem;
 
-            if (AdaptiveStates.CurrentState == NarrowState)
+            if (this.MasterListView.SelectedItems.Count == 1)
             {
-                // Use "drill in" transition for navigating from master list to detail view
-                Frame.Navigate(typeof(DetailPage), clickedItem.FullName, new DrillInNavigationTransitionInfo());
+                if (AdaptiveStates.CurrentState == NarrowState)
+                {
+                    // Use "drill in" transition for navigating from master list to detail view
+                    Frame.Navigate(typeof(DetailPage), clickedItem.FullName, new DrillInNavigationTransitionInfo());
+                }
+                else
+                {
+                    // Play a refresh animation when the user switches detail items.
+                    EnableContentTransitions();
+                }
             }
             else
             {
-                // Play a refresh animation when the user switches detail items.
-                EnableContentTransitions();
+                
             }
         }
 
@@ -134,6 +145,28 @@ namespace Sbs20.Filenote.Views
 
                 //block.Visibility = Visibility.Collapsed;
                 //box.Visibility = Visibility.Visible;
+            }
+        }
+
+        private void Add_Click(object sender, RoutedEventArgs e)
+        {
+            var notes = (NoteCollectionViewModel)this.MasterListView.ItemsSource;
+            notes.CreateNew();
+        }
+
+        private void Delete_Click(object sender, RoutedEventArgs e)
+        {
+            var notes = (NoteCollectionViewModel)this.MasterListView.ItemsSource;
+
+            IList<NoteViewModel> toBeDeleted = new List<NoteViewModel>();
+            foreach (NoteViewModel note in this.MasterListView.SelectedItems)
+            {
+                toBeDeleted.Add(note);
+            }
+
+            foreach (var note in toBeDeleted)
+            {
+                notes.Remove(note);
             }
         }
     }

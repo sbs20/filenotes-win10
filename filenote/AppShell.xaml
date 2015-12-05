@@ -65,7 +65,8 @@
                    OpenPaneLength="256"
                    IsTabStop="False">
             <SplitView.Pane>
-                <!-- A custom ListView to display the items in the pane.  The automation Name is set in the ContainerContentChanging event. -->
+                <!-- A custom ListView to display the items in the pane.  
+                The automation Name is set in the ContainerContentChanging event. -->
                 <controls:NavigationMenuListView x:Name="NavMenuList"
                                           TabIndex="3"
                                           Margin="0,48,0,0"

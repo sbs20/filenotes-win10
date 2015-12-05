@@ -125,10 +125,19 @@
             <ColumnDefinition x:Name="DetailColumn" Width="*" />
         </Grid.ColumnDefinitions>
 
-        <TextBlock
-            Text="Notes"
-            Margin="12,8,8,8"
-            Style="{ThemeResource TitleTextBlockStyle}" />
+        <CommandBar
+            Name="commandBar"
+            VerticalAlignment="Top"
+            HorizontalContentAlignment="Stretch">
+            <CommandBar.Content>
+                <TextBlock
+                    Text="Notes"
+                    Margin="12,8,8,8"
+                    Style="{ThemeResource TitleTextBlockStyle}" />
+            </CommandBar.Content>
+            <AppBarButton Name="Add" Icon="Add" Label="Add" Click="Add_Click" />
+            <AppBarButton Name="Delete" Icon="Delete" Label="Delete" Click="Delete_Click"/>
+        </CommandBar>
 
         <ListView
             x:Name="MasterListView"
@@ -136,6 +145,7 @@
             ItemContainerTransitions="{x:Null}"
             ItemTemplate="{StaticResource MasterListViewItemTemplate}"
             IsItemClickEnabled="True"
+            SelectionMode="Extended"
             ItemClick="MasterListView_ItemClick"
             KeyDown="MasterListView_KeyDown">
             <ListView.ItemContainerStyle>

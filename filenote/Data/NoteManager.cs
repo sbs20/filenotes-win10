@@ -34,17 +34,38 @@ namespace Sbs20.Filenote.Data
             return cache ?? new List<Note>();
         }
 
-        public static async Task<Note> GetItemByIdAsync(string id)
+        public static async Task<Note> GetItemByFullNameAsync(string fullName)
         {
             var notes = await GetAllItemsAsync();
-            return notes.Where(n => n.FullName == id).FirstOrDefault();
+            return notes.Where(n => n.FullName == fullName).FirstOrDefault();
         }
 
         public static async Task SaveNoteAsync(Note note)
         {
             var folder = await Settings.GetStorageFolderAsync();
-            var file = await folder.GetFileAsync(note.FullName);
+            StorageFile file = await folder.GetFileAsync(note.FullName);
             await FileIO.WriteTextAsync(file, note.Text);
+        }
+
+        public static async Task CreateNoteAsync(Note note)
+        {
+            var folder = await Settings.GetStorageFolderAsync();
+            var file = await folder.CreateFileAsync(note.FullName, CreationCollisionOption.GenerateUniqueName);
+            await FileIO.WriteTextAsync(file, note.Text);
+        }
+
+        public static async Task DeleteNoteAsync(Note note)
+        {
+            var folder = await Settings.GetStorageFolderAsync();
+            var file = await folder.GetFileAsync(note.FullName);
+            await file.DeleteAsync(StorageDeleteOption.Default);
+        }
+
+        public static async Task RenameNoteAsync(Note note, string desiredName)
+        {
+            var folder = await Settings.GetStorageFolderAsync();
+            var file = await folder.GetFileAsync(note.FullName);
+            await file.RenameAsync(desiredName);
         }
     }
 }

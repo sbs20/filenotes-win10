@@ -1,28 +1,66 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.Linq;
 using System.Threading.Tasks;
 using Sbs20.Filenote.Data;
 
 namespace Sbs20.Filenote.ViewModels
 {
-    public class NoteCollectionViewModel : IEnumerable<NoteViewModel>, INotifyCollectionChanged
+    public class NoteCollectionViewModel : ObservableCollection<NoteViewModel>
     {
-        private IList<NoteViewModel> list;
-
-        public event NotifyCollectionChangedEventHandler CollectionChanged;
-
-        private void OnNotifyCollectionChanged(NotifyCollectionChangedEventArgs args)
-        {
-            if (this.CollectionChanged != null)
-            {
-                this.CollectionChanged(this, args);
-            }
-        }
+        public bool IsListening { get; set; }
 
         private NoteCollectionViewModel()
         {
-            this.list = new List<NoteViewModel>();
+            this.IsListening = false;
+            this.CollectionChanged += NoteCollectionViewModel_CollectionChanged;
+        }
+
+        private bool IsExistingTitle(string title)
+        {
+            return this.FirstOrDefault(n => n.Title.Equals(title, StringComparison.OrdinalIgnoreCase)) != null;
+        }
+
+        public string CreateNewUniqueName()
+        {
+            const string stem = "_New{0}.txt";
+            string attempt = string.Format(stem, "");
+            int i = 0;
+            while (this.IsExistingTitle(attempt))
+            {
+                ++i;
+                attempt = string.Format(stem, i);
+            }
+
+            return attempt;
+        }
+
+        private async void NoteCollectionViewModel_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            if (this.IsListening)
+            {
+                switch (e.Action)
+                {
+                    case NotifyCollectionChangedAction.Add:
+                        foreach (NoteViewModel note in e.NewItems)
+                        {
+                            await NoteManager.CreateNoteAsync(note.ToNote());
+                        }
+
+                        break;
+
+                    case NotifyCollectionChangedAction.Remove:
+                        foreach (NoteViewModel note in e.OldItems)
+                        {
+                            await NoteManager.DeleteNoteAsync(note.ToNote());
+                        }
+
+                        break;
+                }
+            }
         }
 
         public static async Task<NoteCollectionViewModel> LoadAsync()
@@ -45,68 +83,32 @@ namespace Sbs20.Filenote.ViewModels
             }
         }
 
-        public void Add(NoteViewModel item)
+        private void InsertInOrder(NoteViewModel note)
         {
-            this.list.Add(item);
-            this.OnNotifyCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, item));
+            var firstNote = this.FirstOrDefault(nvm => nvm.Title.CompareTo(note.Title) > 0);
+            if (firstNote == null)
+            {
+                this.Add(note);
+            }
+            else
+            {
+                int index = this.IndexOf(firstNote);
+                this.Insert(index, note);
+            }
         }
 
-        public IEnumerator<NoteViewModel> GetEnumerator()
+        public void CreateNew()
         {
-            return this.list.GetEnumerator();
-        }
+            string name = this.CreateNewUniqueName();
+            var note = new NoteViewModel
+            {
+                DateCreated = DateTime.Now,
+                Title = name,
+                FullName = name,
+                Text = string.Empty
+            };
 
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return (IEnumerator)this.GetEnumerator();
+            this.InsertInOrder(note);
         }
     }
 }
-
-//public void Add(CollectionItem item)
-//{
-//    this._lstItems.Add(item);
-//    this.OnNotifyCollectionChanged(
-//      new NotifyCollectionChangedEventArgs(
-//        NotifyCollectionChangedAction.Add, item));
-//}
-
-//public void Remove(CollectionItem item)
-//{
-//    this._lstItems.Remove(item);
-//    this.OnNotifyCollectionChanged(
-//      new NotifyCollectionChangedEventArgs(
-//        NotifyCollectionChangedAction.Remove, item));
-//}
-
-//// ... other actions for the collection ...
-
-//public CollectionItem this[Int32 index]
-//{
-//    get
-//    {
-//        return this._lstItems[index];
-//    }
-//}
-
-//#region INotifyCollectionChanged
-//private void OnNotifyCollectionChanged(NotifyCollectionChangedEventArgs args)
-//{
-//    if (this.CollectionChanged != null)
-//    {
-//        this.CollectionChanged(this, args);
-//    }
-//}
-//public event NotifyCollectionChangedEventHandler CollectionChanged;
-//#endregion INotifyCollectionChanged
-
-//#region IEnumerable
-//public List<CollectionItem>.Enumerator GetEnumerator()
-//{
-//    return this._lstItems.GetEnumerator();
-//}
-//IEnumerator IEnumerable.GetEnumerator()
-//{
-//    return (IEnumerator)this.GetEnumerator();
-//}
-//#endregion IEnumerable
