@@ -7,6 +7,7 @@ using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
+using Sbs20.Filenote.Extensions;
 using Sbs20.Filenote.ViewModels;
 
 namespace Sbs20.Filenote.Views
@@ -14,6 +15,7 @@ namespace Sbs20.Filenote.Views
     public sealed partial class MasterDetailPage : Page
     {
         private NoteViewModel lastSelectedNote;
+        private NoteCollectionViewModel notes;
 
         public MasterDetailPage()
         {
@@ -26,17 +28,16 @@ namespace Sbs20.Filenote.Views
 
             if (this.MasterListView.ItemsSource == null)
             {
-                NoteCollectionViewModel items = await NoteCollectionViewModel.LoadAsync();
-                items.IsListening = true;
-                this.MasterListView.ItemsSource = items;
+                this.notes = await NoteCollectionViewModel.LoadAsync();
+                this.MasterListView.ItemsSource = this.notes;
             }
 
             if (e.Parameter != null)
             {
                 // Parameter is item name
-                var fullName = (string)e.Parameter;
-                this.lastSelectedNote = ((NoteCollectionViewModel)this.MasterListView.ItemsSource)
-                    .Where((item) => item.FullName == fullName)
+                var title = (string)e.Parameter;
+                this.lastSelectedNote = this.notes
+                    .Where((item) => item.Title == title)
                     .FirstOrDefault();
             }
 
@@ -59,7 +60,7 @@ namespace Sbs20.Filenote.Views
             if (isNarrow && oldState == this.DefaultState && lastSelectedNote != null)
             {
                 // Resize down to the detail item. Don't play a transition.
-                Frame.Navigate(typeof(DetailPage), this.lastSelectedNote.FullName, new SuppressNavigationTransitionInfo());
+                Frame.Navigate(typeof(DetailPage), this.lastSelectedNote.Title, new SuppressNavigationTransitionInfo());
             }
 
             EntranceNavigationTransitionInfo.SetIsTargetElement(MasterListView, isNarrow);
@@ -79,7 +80,7 @@ namespace Sbs20.Filenote.Views
                 if (AdaptiveStates.CurrentState == NarrowState)
                 {
                     // Use "drill in" transition for navigating from master list to detail view
-                    Frame.Navigate(typeof(DetailPage), clickedItem.FullName, new DrillInNavigationTransitionInfo());
+                    Frame.Navigate(typeof(DetailPage), clickedItem.Title, new DrillInNavigationTransitionInfo());
                 }
                 else
                 {
@@ -116,9 +117,7 @@ namespace Sbs20.Filenote.Views
         private async void NoteText_LostFocus(object sender, RoutedEventArgs e)
         {
             // Do saves
-            var notes = (NoteCollectionViewModel)this.MasterListView.ItemsSource;
-            var save = notes.SaveAsync();
-            await save;
+            await this.notes.SaveAllAsync();
         }
 
         private void NoteText_TextChanged(object sender, RoutedEventArgs e)
@@ -135,29 +134,39 @@ namespace Sbs20.Filenote.Views
         {
             if (e.Key == VirtualKey.F2)
             {
-                // Do nothing for now
-                //var item = this.MasterListView.SelectedItem;
+                var note = this.MasterListView.SelectedItem;
 
-                //var container = this.MasterListView.ContainerFromItem(item);
-                //var elements = container.AllChildren();
-                //var block = elements.First(c => c.Name == "titleBlock") as TextBlock;
-                //var box = elements.First(c => c.Name == "titleBox") as TextBox;
+                var container = this.MasterListView.ContainerFromItem(note);
+                var elements = container.AllChildren().OfType<FrameworkElement>();
+                var block = elements.First(c => c.Name == "titleBlock") as TextBlock;
+                var box = elements.First(c => c.Name == "titleBox") as TextBox;
 
-                //block.Visibility = Visibility.Collapsed;
-                //box.Visibility = Visibility.Visible;
+                block.Visibility = Visibility.Collapsed;
+                box.Visibility = Visibility.Visible;
             }
         }
 
-        private void Add_Click(object sender, RoutedEventArgs e)
+        private async void titleBox_LostFocus(object sender, RoutedEventArgs e)
         {
-            var notes = (NoteCollectionViewModel)this.MasterListView.ItemsSource;
-            notes.CreateNew();
+            var box = e.OriginalSource as TextBox;
+            FrameworkElement element = box;
+            ListViewItem container = box.AllAncestry().First(el => el is ListViewItem) as ListViewItem;
+            var note = this.MasterListView.ItemFromContainer(container) as NoteViewModel;
+            var block = container.AllChildren().OfType<FrameworkElement>().First(el => el.Name == "titleBlock") as TextBlock;
+
+            block.Visibility = Visibility.Visible;
+            box.Visibility = Visibility.Collapsed;
+
+            await this.notes.RenameNote(note, box.Text);
         }
 
-        private void Delete_Click(object sender, RoutedEventArgs e)
+        private async void Add_Click(object sender, RoutedEventArgs e)
         {
-            var notes = (NoteCollectionViewModel)this.MasterListView.ItemsSource;
+            await this.notes.CreateNote();
+        }
 
+        private async void Delete_Click(object sender, RoutedEventArgs e)
+        {
             IList<NoteViewModel> toBeDeleted = new List<NoteViewModel>();
             foreach (NoteViewModel note in this.MasterListView.SelectedItems)
             {
@@ -166,7 +175,7 @@ namespace Sbs20.Filenote.Views
 
             foreach (var note in toBeDeleted)
             {
-                notes.Remove(note);
+                await this.notes.DeleteNote(note);
             }
         }
     }

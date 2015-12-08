@@ -28,8 +28,8 @@
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
 
-                <TextBlock Text="{x:Bind Title}" Style="{ThemeResource BaseTextBlockStyle}" Name="titleBlock" />
-                <TextBox Text="{x:Bind Title}" Name="titleBox" Visibility="Collapsed" />
+                <TextBlock Text="{x:Bind Title, Mode=OneWay}" Style="{ThemeResource BaseTextBlockStyle}" Name="titleBlock" />
+                <TextBox Text="{x:Bind Title}" Name="titleBox" Visibility="Collapsed" LostFocus="titleBox_LostFocus" />
 
                 <TextBlock
                     Text="{x:Bind Text, Mode=OneWay}"

@@ -8,6 +8,7 @@ namespace Sbs20.Filenote.ViewModels
 {
     public class NoteViewModel : INotifyPropertyChanged
     {
+        private string title;
         private string originalContent;
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -20,8 +21,15 @@ namespace Sbs20.Filenote.ViewModels
             }
         }
 
-        public string FullName { get; set; }
-        public string Title { get; set; }
+        public string Title
+        {
+            get { return this.title; }
+            set
+            {
+                this.title = value;
+                this.OnPropertyChanged("Title");
+            }
+        }
         public string Text { get; set; }
         public DateTime DateCreated { get; set; }
 
@@ -33,7 +41,6 @@ namespace Sbs20.Filenote.ViewModels
         {
             return new NoteViewModel()
             {
-                FullName = note.FullName,
                 DateCreated = note.DateCreated,
                 Title = note.Title,
                 Text = note.Text,
@@ -68,7 +75,6 @@ namespace Sbs20.Filenote.ViewModels
         {
             return new Note
             {
-                FullName = this.FullName ?? this.Title,
                 DateCreated = this.DateCreated,
                 Title = this.Title,
                 Text = this.Text

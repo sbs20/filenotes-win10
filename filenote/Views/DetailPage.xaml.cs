@@ -34,7 +34,7 @@ namespace Sbs20.Filenote.Views
             base.OnNavigatedTo(e);
 
             // Parameter is item ID
-            var note = await NoteManager.GetItemByFullNameAsync((string)e.Parameter);
+            var note = await NoteManager.GetItemByTitleAsync((string)e.Parameter);
             Note = NoteViewModel.Create(note);
 
             var backStack = Frame.BackStack;
@@ -49,7 +49,7 @@ namespace Sbs20.Filenote.Views
                 // will show the correct item in the side-by-side view.
                 var modifiedEntry = new PageStackEntry(
                     masterPageEntry.SourcePageType,
-                    this.Note.FullName,
+                    this.Note.Title,
                     masterPageEntry.NavigationTransitionInfo);
 
                 backStack.Add(modifiedEntry);

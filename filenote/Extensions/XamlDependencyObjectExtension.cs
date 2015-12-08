@@ -11,18 +11,27 @@ namespace Sbs20.Filenote.Extensions
     public static class XamlDependencyObjectExtension
     {
         // Inspired by: http://blog.jerrynixon.com/2012/09/how-to-access-named-control-inside-xaml.html
-        public static IEnumerable<FrameworkElement> AllChildren(this DependencyObject parent)
+        public static IEnumerable<DependencyObject> AllChildren(this DependencyObject parent)
         {
-            var list = new List<FrameworkElement>();
+            var list = new List<DependencyObject>();
             for (int index = 0; index < VisualTreeHelper.GetChildrenCount(parent); index++)
             {
                 var child = VisualTreeHelper.GetChild(parent, index);
-                if (child is FrameworkElement)
-                {
-                    list.Add(child as FrameworkElement);
-                }
+                list.Add(child);
 
                 list.AddRange(child.AllChildren());
+            }
+
+            return list;
+        }
+
+        public static IEnumerable<DependencyObject> AllAncestry(this DependencyObject child)
+        {
+            var list = new List<DependencyObject>();
+            for (var parent = VisualTreeHelper.GetParent(child); parent != null; parent = VisualTreeHelper.GetParent(parent))
+            {
+                //VisualTreeHelper.GetParent(
+                list.Add(parent);
             }
 
             return list;

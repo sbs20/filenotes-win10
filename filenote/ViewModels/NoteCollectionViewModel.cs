@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Linq;
@@ -11,11 +9,8 @@ namespace Sbs20.Filenote.ViewModels
 {
     public class NoteCollectionViewModel : ObservableCollection<NoteViewModel>
     {
-        public bool IsListening { get; set; }
-
         private NoteCollectionViewModel()
         {
-            this.IsListening = false;
             this.CollectionChanged += NoteCollectionViewModel_CollectionChanged;
         }
 
@@ -38,29 +33,8 @@ namespace Sbs20.Filenote.ViewModels
             return attempt;
         }
 
-        private async void NoteCollectionViewModel_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        private void NoteCollectionViewModel_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            if (this.IsListening)
-            {
-                switch (e.Action)
-                {
-                    case NotifyCollectionChangedAction.Add:
-                        foreach (NoteViewModel note in e.NewItems)
-                        {
-                            await NoteManager.CreateNoteAsync(note.ToNote());
-                        }
-
-                        break;
-
-                    case NotifyCollectionChangedAction.Remove:
-                        foreach (NoteViewModel note in e.OldItems)
-                        {
-                            await NoteManager.DeleteNoteAsync(note.ToNote());
-                        }
-
-                        break;
-                }
-            }
         }
 
         public static async Task<NoteCollectionViewModel> LoadAsync()
@@ -75,7 +49,7 @@ namespace Sbs20.Filenote.ViewModels
             return items;
         }
 
-        public async Task SaveAsync()
+        public async Task SaveAllAsync()
         {
             foreach (var note in this)
             {
@@ -97,18 +71,31 @@ namespace Sbs20.Filenote.ViewModels
             }
         }
 
-        public void CreateNew()
+        public async Task CreateNote()
         {
             string name = this.CreateNewUniqueName();
             var note = new NoteViewModel
             {
                 DateCreated = DateTime.Now,
                 Title = name,
-                FullName = name,
                 Text = string.Empty
             };
 
             this.InsertInOrder(note);
+            await NoteManager.CreateNoteAsync(note.ToNote());
+        }
+
+        public async Task RenameNote(NoteViewModel note, string desiredName)
+        {
+            note.Title = await NoteManager.RenameNoteAsync(note.ToNote(), desiredName);
+            this.Remove(note);
+            this.InsertInOrder(note);
+        }
+    
+        public async Task DeleteNote(NoteViewModel note)
+        {
+            this.Remove(note);
+            await NoteManager.DeleteNoteAsync(note.ToNote());
         }
     }
 }
