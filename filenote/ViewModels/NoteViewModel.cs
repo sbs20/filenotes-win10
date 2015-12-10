@@ -6,10 +6,11 @@ using Windows.Globalization.DateTimeFormatting;
 
 namespace Sbs20.Filenote.ViewModels
 {
-    public class NoteViewModel : INotifyPropertyChanged
+    public class NoteViewModel : INotifyPropertyChanged, INote
     {
-        private string title;
-        private string originalContent;
+        private string name;
+        private string text;
+        private string originalText;
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -21,33 +22,36 @@ namespace Sbs20.Filenote.ViewModels
             }
         }
 
-        public string Title
+        public string Name
         {
-            get { return this.title; }
+            get { return this.name; }
             set
             {
-                this.title = value;
+                this.name = value;
                 this.OnPropertyChanged("Title");
             }
         }
-        public string Text { get; set; }
+
+        public string Text
+        {
+            get { return this.text; }
+            set
+            {
+                this.text = value;
+                this.OnPropertyChanged("Text");
+                if (this.originalText == null)
+                {
+                    this.originalText = this.text;
+                }
+            }
+        }
+
         public DateTime DateCreated { get; set; }
+        public DateTime DateModified { get; set; }
 
         public NoteViewModel()
         {
         }
-
-        public static NoteViewModel Create(Note note)
-        {
-            return new NoteViewModel()
-            {
-                DateCreated = note.DateCreated,
-                Title = note.Title,
-                Text = note.Text,
-                originalContent = note.Text
-            };
-        }
-
 
         public string DateCreatedHourMinute
         {
@@ -68,29 +72,17 @@ namespace Sbs20.Filenote.ViewModels
 
         public bool IsDirty
         {
-            get { return this.originalContent != this.Text; }
-        }
-
-        public Note ToNote()
-        {
-            return new Note
-            {
-                DateCreated = this.DateCreated,
-                Title = this.Title,
-                Text = this.Text
-            };
+            get { return this.originalText != this.Text; }
         }
 
         public async Task SyncNoteViewModelAsync()
         {
             if (this.IsDirty)
             {
-                var save = NoteManager.SaveNoteAsync(this.ToNote());
-                this.originalContent = this.Text;
-                this.OnPropertyChanged("Text");
+                var save = StorageManager.SaveNoteAsync(this);
+                this.originalText = this.Text;
                 await save;
             }
         }
-
     }
 }

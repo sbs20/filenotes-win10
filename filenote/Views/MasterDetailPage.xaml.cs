@@ -37,7 +37,7 @@ namespace Sbs20.Filenote.Views
                 // Parameter is item name
                 var title = (string)e.Parameter;
                 this.lastSelectedNote = this.notes
-                    .Where((item) => item.Title == title)
+                    .Where((item) => item.Name == title)
                     .FirstOrDefault();
             }
 
@@ -60,7 +60,7 @@ namespace Sbs20.Filenote.Views
             if (isNarrow && oldState == this.DefaultState && lastSelectedNote != null)
             {
                 // Resize down to the detail item. Don't play a transition.
-                Frame.Navigate(typeof(DetailPage), this.lastSelectedNote.Title, new SuppressNavigationTransitionInfo());
+                Frame.Navigate(typeof(DetailPage), this.lastSelectedNote.Name, new SuppressNavigationTransitionInfo());
             }
 
             EntranceNavigationTransitionInfo.SetIsTargetElement(MasterListView, isNarrow);
@@ -80,7 +80,7 @@ namespace Sbs20.Filenote.Views
                 if (AdaptiveStates.CurrentState == NarrowState)
                 {
                     // Use "drill in" transition for navigating from master list to detail view
-                    Frame.Navigate(typeof(DetailPage), clickedItem.Title, new DrillInNavigationTransitionInfo());
+                    Frame.Navigate(typeof(DetailPage), clickedItem.Name, new DrillInNavigationTransitionInfo());
                 }
                 else
                 {

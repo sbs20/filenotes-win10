@@ -16,7 +16,7 @@ namespace Sbs20.Filenote.ViewModels
 
         private bool IsExistingTitle(string title)
         {
-            return this.FirstOrDefault(n => n.Title.Equals(title, StringComparison.OrdinalIgnoreCase)) != null;
+            return this.FirstOrDefault(n => n.Name.Equals(title, StringComparison.OrdinalIgnoreCase)) != null;
         }
 
         public string CreateNewUniqueName()
@@ -40,10 +40,10 @@ namespace Sbs20.Filenote.ViewModels
         public static async Task<NoteCollectionViewModel> LoadAsync()
         {
             NoteCollectionViewModel items = new NoteCollectionViewModel();
-            var notes = await NoteManager.GetAllItemsAsync();
+            var notes = await StorageManager.GetAllNotesAsync();
             foreach (var note in notes)
             {
-                items.Add(NoteViewModel.Create(note));
+                items.Add(note as NoteViewModel);
             }
 
             return items;
@@ -59,7 +59,7 @@ namespace Sbs20.Filenote.ViewModels
 
         private void InsertInOrder(NoteViewModel note)
         {
-            var firstNote = this.FirstOrDefault(nvm => nvm.Title.CompareTo(note.Title) > 0);
+            var firstNote = this.FirstOrDefault(nvm => nvm.Name.CompareTo(note.Name) > 0);
             if (firstNote == null)
             {
                 this.Add(note);
@@ -77,17 +77,17 @@ namespace Sbs20.Filenote.ViewModels
             var note = new NoteViewModel
             {
                 DateCreated = DateTime.Now,
-                Title = name,
+                Name = name,
                 Text = string.Empty
             };
 
             this.InsertInOrder(note);
-            await NoteManager.CreateNoteAsync(note.ToNote());
+            await StorageManager.CreateNoteAsync(note);
         }
 
         public async Task RenameNote(NoteViewModel note, string desiredName)
         {
-            note.Title = await NoteManager.RenameNoteAsync(note.ToNote(), desiredName);
+            note.Name = await StorageManager.RenameNoteAsync(note, desiredName);
             this.Remove(note);
             this.InsertInOrder(note);
         }
@@ -95,7 +95,7 @@ namespace Sbs20.Filenote.ViewModels
         public async Task DeleteNote(NoteViewModel note)
         {
             this.Remove(note);
-            await NoteManager.DeleteNoteAsync(note.ToNote());
+            await StorageManager.DeleteNoteAsync(note);
         }
     }
 }

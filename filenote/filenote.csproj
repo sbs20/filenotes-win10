@@ -106,8 +106,8 @@
     <Compile Include="Controls\PageHeader.xaml.cs">
       <DependentUpon>PageHeader.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Data\Note.cs" />
-    <Compile Include="Data\NoteManager.cs" />
+    <Compile Include="Data\INote.cs" />
+    <Compile Include="Data\StorageManager.cs" />
     <Compile Include="Data\Settings.cs" />
     <Compile Include="ViewModels\NavigationMenuItem.cs" />
     <Compile Include="Views\DetailPage.xaml.cs">
