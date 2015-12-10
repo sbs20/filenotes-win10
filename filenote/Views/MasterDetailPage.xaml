@@ -66,7 +66,7 @@
 
                 <ScrollViewer
                     Grid.Row="1"
-                    Padding="20, 20"
+                    Padding="10, 10"
                     VerticalScrollBarVisibility="Auto"
                     HorizontalScrollBarVisibility="Auto">
                     <StackPanel>
