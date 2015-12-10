@@ -31,29 +31,6 @@ namespace Sbs20.Filenote
         /// <param name="e">Details about the launch request and process.</param>
         protected override void OnLaunched(LaunchActivatedEventArgs e)
         {
-            //Frame rootFrame = Window.Current.Content as Frame;
-
-            //// Do not repeat app initialization when the Window already has content,
-            //// just ensure that the window is active
-            //if (rootFrame == null)
-            //{
-            //    // Create a Frame to act as the navigation context and navigate to the first page
-            //    rootFrame = new Frame();
-            //    // Set the default language
-            //    rootFrame.Language = Windows.Globalization.ApplicationLanguages.Languages[0];
-
-            //    rootFrame.NavigationFailed += OnNavigationFailed;
-
-            //    if (rootFrame.Content == null)
-            //    {
-            //        rootFrame.Navigate(typeof(MasterDetailPage));
-            //    }
-
-            //    // Place the frame in the current Window
-            //    Window.Current.Content = rootFrame;
-            //}
-
-
             AppShell shell = Window.Current.Content as AppShell;
 
             // Do not repeat app initialization when the Window already has content,
@@ -83,9 +60,6 @@ namespace Sbs20.Filenote
                 // suppressing the initial entrance animation.
                 shell.AppFrame.Navigate(typeof(MasterDetailPage), e.Arguments, new Windows.UI.Xaml.Media.Animation.SuppressNavigationTransitionInfo());
             }
-
-
-
 
             // Ensure the current window is active
             Window.Current.Activate();
