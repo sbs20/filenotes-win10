@@ -1,0 +1,43 @@
+﻿<Page
+    x:Class="Sbs20.Filenote.Views.AboutPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Sbs20.Filenote"
+    xmlns:c="using:Sbs20.Filenote.Controls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}"
+    mc:Ignorable="d">
+
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition />
+        </Grid.RowDefinitions>
+
+        <c:PageHeader x:Name="pageHeader">
+            <c:PageHeader.HeaderContent>
+                <TextBlock x:Name="title" Style="{ThemeResource PageTitleTextBlockStyle}" Text="About Filenote"/>
+            </c:PageHeader.HeaderContent>
+        </c:PageHeader>
+
+        <ScrollViewer Grid.Row="1" EntranceNavigationTransitionInfo.IsTargetElement="True" Margin="12,4,0,0">
+            <StackPanel >
+                <TextBlock Style="{ThemeResource SubtitleTextBlockStyle}" Margin="12,12,12,4">Overview</TextBlock>
+                <TextBlock Style="{ThemeResource BodyTextBlockStyle}" Margin="12,4">This is a simple note taking app
+                    which stores notes as files on the filesystem. You can then use your own cloud backup - OneDrive,
+                    Dropbox, GoogleDrive etc - to keep everything up to date.
+                </TextBlock>
+
+                <TextBlock Style="{ThemeResource SubtitleTextBlockStyle}" Margin="12,12,12,4">License</TextBlock>
+                <TextBlock Style="{ThemeResource BodyTextBlockStyle}" Margin="12,4">This software is free to use
+                    for business or personal use. It is open source and released under the GPL2 license.
+                </TextBlock>
+
+                <TextBlock Style="{ThemeResource SubtitleTextBlockStyle}" Margin="12,12,12,4">Copyright</TextBlock>
+                <TextBlock Style="{ThemeResource BodyTextBlockStyle}" Margin="12,4">Sam Strachan 2015
+                </TextBlock>
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</Page>

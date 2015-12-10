@@ -4,6 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:Sbs20.Filenote"
     xmlns:viewmodels="using:Sbs20.Filenote.ViewModels"
+    xmlns:c="using:Sbs20.Filenote.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
@@ -28,8 +29,8 @@
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
 
-                <TextBlock Text="{x:Bind Title, Mode=OneWay}" Style="{ThemeResource BaseTextBlockStyle}" Name="titleBlock" />
-                <TextBox Text="{x:Bind Title}" Name="titleBox" Visibility="Collapsed" LostFocus="titleBox_LostFocus" />
+                <TextBlock Text="{x:Bind Name, Mode=OneWay}" Style="{ThemeResource BaseTextBlockStyle}" Name="titleBlock" />
+                <TextBox Text="{x:Bind Name}" Name="titleBox" Visibility="Collapsed" LostFocus="titleBox_LostFocus" />
 
                 <TextBlock
                     Text="{x:Bind Text, Mode=OneWay}"
@@ -57,14 +58,15 @@
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
 
-                <TextBlock
-                    Margin="0,8"
-                    Style="{ThemeResource TitleTextBlockStyle}"
-                    HorizontalAlignment="Left"
-                    Text="{x:Bind Title}"/>
+                <c:PageHeader x:Name="pageHeader">
+                    <c:PageHeader.HeaderContent>
+                        <TextBlock x:Name="title" Style="{ThemeResource PageTitleTextBlockStyle}" Text="{x:Bind Name}"/>
+                    </c:PageHeader.HeaderContent>
+                </c:PageHeader>
 
                 <ScrollViewer
                     Grid.Row="1"
+                    Padding="20, 20"
                     VerticalScrollBarVisibility="Auto"
                     HorizontalScrollBarVisibility="Auto">
                     <StackPanel>
@@ -92,7 +94,7 @@
         </DataTemplate>
     </Page.Resources>
 
-    <Grid x:Name="LayoutRoot" Loaded="LayoutRoot_Loaded">
+    <Grid x:Name="LayoutRoot" Loaded="LayoutRoot_Loaded" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup x:Name="AdaptiveStates" CurrentStateChanged="AdaptiveStates_CurrentStateChanged">
                 <VisualState x:Name="DefaultState">
@@ -130,10 +132,7 @@
             VerticalAlignment="Top"
             HorizontalContentAlignment="Stretch">
             <CommandBar.Content>
-                <TextBlock
-                    Text="Notes"
-                    Margin="12,8,8,8"
-                    Style="{ThemeResource TitleTextBlockStyle}" />
+                <TextBlock Text="Notes" Style="{ThemeResource PageTitleTextBlockStyle}"/>
             </CommandBar.Content>
             <AppBarButton Name="Add" Icon="Add" Label="Add" Click="Add_Click" />
             <AppBarButton Name="Delete" Icon="Delete" Label="Delete" Click="Delete_Click"/>
@@ -160,7 +159,7 @@
             Grid.Column="1"
             Grid.RowSpan="2"
             BorderThickness="1,0,0,0"
-            Padding="24,0"
+            Padding="0"
             BorderBrush="{ThemeResource SystemControlForegroundBaseLowBrush}"
             Content="{x:Bind MasterListView.SelectedItem, Mode=OneWay}"
             ContentTemplate="{StaticResource DetailContentTemplate}">

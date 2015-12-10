@@ -33,7 +33,7 @@
                 Margin="8,0"
                 Style="{ThemeResource TitleTextBlockStyle}"
                 HorizontalAlignment="Left"
-                Text="{x:Bind Note.Title, Mode=OneWay}" />
+                Text="{x:Bind Note.Name, Mode=OneWay}" />
         </StackPanel>
 
         <TextBlock

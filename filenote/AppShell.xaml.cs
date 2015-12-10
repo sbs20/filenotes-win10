@@ -26,15 +26,21 @@ namespace Sbs20.Filenote
             {
                 new NavigationMenuItem()
                 {
-                    Symbol = Symbol.Contact,
+                    Symbol = Symbol.Edit,
                     Label = "Notes",
                     DestPage = typeof(MasterDetailPage)
                 },
                 new NavigationMenuItem()
                 {
-                    Symbol = Symbol.Edit,
-                    Label = "CommandBar Page",
-                    DestPage = typeof(LandingPage)
+                    Symbol = Symbol.Setting,
+                    Label = "Settings",
+                    DestPage = typeof(SettingsPage)
+                },
+                new NavigationMenuItem()
+                {
+                    Symbol = Symbol.Globe,
+                    Label = "About",
+                    DestPage = typeof(AboutPage)
                 },
             });
 

@@ -110,12 +110,15 @@
     <Compile Include="Data\StorageManager.cs" />
     <Compile Include="Data\Settings.cs" />
     <Compile Include="ViewModels\NavigationMenuItem.cs" />
+    <Compile Include="Views\SettingsPage.xaml.cs">
+      <DependentUpon>SettingsPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\DetailPage.xaml.cs">
       <DependentUpon>DetailPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Extensions\XamlDependencyObjectExtension.cs" />
-    <Compile Include="Views\LandingPage.xaml.cs">
-      <DependentUpon>LandingPage.xaml</DependentUpon>
+    <Compile Include="Views\AboutPage.xaml.cs">
+      <DependentUpon>AboutPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\MasterDetailPage.xaml.cs">
       <DependentUpon>MasterDetailPage.xaml</DependentUpon>
@@ -200,11 +203,15 @@
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Page>
+    <Page Include="Views\SettingsPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\DetailPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\LandingPage.xaml">
+    <Page Include="Views\AboutPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
