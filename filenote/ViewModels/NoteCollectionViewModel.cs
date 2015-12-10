@@ -14,9 +14,9 @@ namespace Sbs20.Filenote.ViewModels
             this.CollectionChanged += NoteCollectionViewModel_CollectionChanged;
         }
 
-        private bool IsExistingTitle(string title)
+        private bool IsExistingName(string name)
         {
-            return this.FirstOrDefault(n => n.Name.Equals(title, StringComparison.OrdinalIgnoreCase)) != null;
+            return this.FirstOrDefault(n => n.Name.Equals(name, StringComparison.OrdinalIgnoreCase)) != null;
         }
 
         public string CreateNewUniqueName()
@@ -24,7 +24,7 @@ namespace Sbs20.Filenote.ViewModels
             const string stem = "_New{0}.txt";
             string attempt = string.Format(stem, "");
             int i = 0;
-            while (this.IsExistingTitle(attempt))
+            while (this.IsExistingName(attempt))
             {
                 ++i;
                 attempt = string.Format(stem, i);
@@ -77,6 +77,7 @@ namespace Sbs20.Filenote.ViewModels
             var note = new NoteViewModel
             {
                 DateCreated = DateTime.Now,
+                DateModified = DateTime.Now,
                 Name = name,
                 Text = string.Empty
             };
