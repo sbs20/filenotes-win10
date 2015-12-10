@@ -9,9 +9,8 @@ namespace Sbs20.Filenote.ViewModels
 {
     public class NoteCollectionViewModel : ObservableCollection<NoteViewModel>
     {
-        private NoteCollectionViewModel()
+        public NoteCollectionViewModel()
         {
-            this.CollectionChanged += NoteCollectionViewModel_CollectionChanged;
         }
 
         private bool IsExistingName(string name)
@@ -33,20 +32,14 @@ namespace Sbs20.Filenote.ViewModels
             return attempt;
         }
 
-        private void NoteCollectionViewModel_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        public async Task LoadAsync()
         {
-        }
-
-        public static async Task<NoteCollectionViewModel> LoadAsync()
-        {
-            NoteCollectionViewModel items = new NoteCollectionViewModel();
+            this.Clear();
             var notes = await StorageManager.GetAllNotesAsync();
             foreach (var note in notes)
             {
-                items.Add(note as NoteViewModel);
+                this.Add(note as NoteViewModel);
             }
-
-            return items;
         }
 
         public async Task SaveAllAsync()

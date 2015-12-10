@@ -10,7 +10,12 @@ namespace Sbs20.Filenote.Data
     public class StorageManager
     {
         private static List<INote> cache = null;
- 
+
+        public static void ClearCache()
+        {
+            cache = null;
+        }
+
         public static async Task<IList<INote>> GetAllNotesAsync()
         {
             if (cache == null)

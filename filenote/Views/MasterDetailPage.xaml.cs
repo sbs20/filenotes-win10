@@ -20,17 +20,15 @@ namespace Sbs20.Filenote.Views
         public MasterDetailPage()
         {
             this.InitializeComponent();
+            this.notes = new NoteCollectionViewModel();
+            this.MasterListView.ItemsSource = this.notes;
         }
 
         protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
 
-            if (this.MasterListView.ItemsSource == null)
-            {
-                this.notes = await NoteCollectionViewModel.LoadAsync();
-                this.MasterListView.ItemsSource = this.notes;
-            }
+            await this.notes.LoadAsync();
 
             if (e.Parameter != null)
             {

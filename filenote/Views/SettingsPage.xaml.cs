@@ -12,6 +12,7 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using Sbs20.Filenote.Data;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -25,6 +26,11 @@ namespace Sbs20.Filenote.Views
         public SettingsPage()
         {
             this.InitializeComponent();
+        }
+
+        private async void ChangeStorageLocation_Click(object sender, RoutedEventArgs e)
+        {
+            await Settings.SelectLocalDirectoryAsync();
         }
     }
 }

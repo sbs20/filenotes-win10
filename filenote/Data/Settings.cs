@@ -19,11 +19,20 @@ namespace Sbs20.Filenote.Data
 
             fp.FileTypeFilter.Add("*");
 
-            var folder = await fp.PickSingleFolderAsync();
-
-            if (folder != null)
+            while (true)
             {
-                StorageApplicationPermissions.FutureAccessList.AddOrReplace(LocalStorageDirectory, folder);
+                var folder = await fp.PickSingleFolderAsync();
+
+                if (folder != null)
+                {
+                    StorageApplicationPermissions.FutureAccessList.AddOrReplace(LocalStorageDirectory, folder);
+                    StorageManager.ClearCache();
+                }
+
+                if (StorageApplicationPermissions.FutureAccessList.ContainsItem(LocalStorageDirectory))
+                {
+                    break;
+                }
             }
         }
 
