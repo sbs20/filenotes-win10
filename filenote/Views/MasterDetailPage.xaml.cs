@@ -177,6 +177,7 @@ namespace Sbs20.Filenote.Views
 
             // Reset the selected item, otherwise nothing is set. Seems to be lost following disablement
             this.MasterListView.SelectedItem = this.selectedNote;
+            this.MasterListView.ScrollIntoView(this.selectedNote);
         }
 
         private void PageHeader_DoubleTapped(object sender, DoubleTappedRoutedEventArgs e)
