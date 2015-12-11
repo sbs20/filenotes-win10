@@ -77,6 +77,7 @@
                     <controls:NavigationMenuListView.Header>
                         <!-- Using this custom back navigation button until the system-provided back button is enabled. -->
                         <Button x:Name="BackButton"
+                                Visibility="Collapsed"
                                 TabIndex="2"
                                 Style="{StaticResource NavigationBackButtonStyle}"
                                 IsEnabled="{Binding AppFrame.CanGoBack, ElementName=Root}"

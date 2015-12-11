@@ -78,6 +78,7 @@
                             Text="{x:Bind Text}" />
 
                         <TextBox 
+                            Style="{ThemeResource NoteTextStyle}"
                             Padding="0"
                             BorderThickness="0"
                             FontFamily="Consolas"
@@ -87,7 +88,8 @@
                             AcceptsReturn="True"
                             LostFocus="NoteText_LostFocus"
                             TextChanged="NoteText_TextChanged"
-                            Text="{x:Bind Path=Text}" />
+                            Text="{x:Bind Path=Text}">
+                        </TextBox>
                     </StackPanel>
                 </ScrollViewer>
             </Grid>

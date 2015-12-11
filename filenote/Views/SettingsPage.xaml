@@ -25,6 +25,8 @@
                 <TextBlock Style="{ThemeResource SubtitleTextBlockStyle}" Margin="12,12,12,4">Storage location</TextBlock>
                 <TextBlock Style="{ThemeResource BodyTextBlockStyle}" Margin="12,4">This is where your files are stored.</TextBlock>
                 <Button Name="ChangeStorageLocation" Click="ChangeStorageLocation_Click">Change Storage Location</Button>
+                <TextBlock Style="{ThemeResource SubtitleTextBlockStyle}" Margin="12,12,12,4">Themes</TextBlock>
+                <ToggleSwitch x:Name="DarkThemeToggle" Header="Dark theme" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Toggled="DarkThemeToggle_Toggled"/>
             </StackPanel>
         </ScrollViewer>
 

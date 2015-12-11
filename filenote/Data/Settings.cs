@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Windows.Storage;
 using Windows.Storage.AccessCache;
 using Windows.Storage.Pickers;
+using Windows.UI.Xaml;
 
 namespace Sbs20.Filenote.Data
 {
@@ -49,6 +50,23 @@ namespace Sbs20.Filenote.Data
         public static INote CreateNote()
         {
             return new ViewModels.NoteViewModel();
+        }
+
+        public static ApplicationTheme ApplicationTheme
+        {
+            get
+            {
+                if (ApplicationData.Current.LocalSettings.Values.ContainsKey("IsLightTheme"))
+                {
+                    return (bool)ApplicationData.Current.LocalSettings.Values["IsLightTheme"] ? ApplicationTheme.Light : ApplicationTheme.Dark;
+                }
+
+                return ApplicationTheme.Light;
+            }
+            set
+            {
+                ApplicationData.Current.LocalSettings.Values["IsLightTheme"] = value == ApplicationTheme.Light;
+            }
         }
     }
 }

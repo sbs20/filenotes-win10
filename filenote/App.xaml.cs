@@ -4,6 +4,8 @@ using Windows.ApplicationModel.Activation;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Navigation;
 using Sbs20.Filenote.Views;
+using Windows.Storage;
+using Sbs20.Filenote.Data;
 
 // The Blank Application template is documented at http://go.microsoft.com/fwlink/?LinkId=402347&clcid=0x409
 
@@ -22,7 +24,9 @@ namespace Sbs20.Filenote
         {
             this.InitializeComponent();
             this.Suspending += OnSuspending;
+            this.RequestedTheme = Settings.ApplicationTheme;
         }
+
 
         /// <summary>
         /// Invoked when the application is launched normally by the end user.  Other entry points
