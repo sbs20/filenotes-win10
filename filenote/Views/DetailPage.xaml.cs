@@ -5,6 +5,11 @@ using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
 using Sbs20.Filenote.Data;
 using Sbs20.Filenote.ViewModels;
+using Windows.System;
+using Windows.UI.Xaml.Input;
+using Sbs20.Filenote.Extensions;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Sbs20.Filenote.Views
 {
@@ -13,7 +18,7 @@ namespace Sbs20.Filenote.Views
         private static DependencyProperty s_noteProperty
             = DependencyProperty.Register("Note", typeof(NoteViewModel), typeof(DetailPage), new PropertyMetadata(null));
 
-        public static DependencyProperty ItemProperty
+        public static DependencyProperty NoteProperty
         {
             get { return s_noteProperty; }
         }
@@ -35,7 +40,7 @@ namespace Sbs20.Filenote.Views
 
             // Parameter is item ID
             this.Note = await StorageManager.GetNoteByNameAsync((string)e.Parameter) as NoteViewModel;
-
+            
             var backStack = Frame.BackStack;
             var backStackCount = backStack.Count;
 
@@ -138,6 +143,59 @@ namespace Sbs20.Filenote.Views
             e.Handled = true;
 
             OnBackRequested();
+        }
+
+        private void RenameStart()
+        {
+            var headerEdit = this.AllChildren().OfType<FrameworkElement>().Where(el => el.Name == "PageHeaderEdit").First();
+            headerEdit.Visibility = Visibility.Visible;
+
+            var header = this.AllChildren().OfType<FrameworkElement>().Where(el => el.Name == "PageHeader").First();
+            header.Visibility = Visibility.Collapsed;
+        }
+
+        private async Task RenameFinish()
+        {
+            // Make the textbox invisible
+            var headerEdit = this.AllChildren().OfType<FrameworkElement>().Where(el => el.Name == "PageHeaderEdit").First();
+            headerEdit.Visibility = Visibility.Collapsed;
+
+            // Get the textbox itself
+            var box = (TextBox)headerEdit.AllChildren().OfType<TextBox>().First();
+            var desiredName = box.Text;
+            var note = this.Note;
+
+            // Rename
+            await StorageManager.RenameNoteAsync(note, desiredName);
+        }
+
+        private void PageHeader_DoubleTapped(object sender, DoubleTappedRoutedEventArgs e)
+        {
+            this.RenameStart();
+        }
+
+        private async void DetailTitleBox_KeyDown(object sender, KeyRoutedEventArgs e)
+        {
+            if (e.Key == VirtualKey.Enter)
+            {
+                // Stop this being handled again
+                e.Handled = true;
+
+                // Now handle the actual change
+                await this.RenameFinish();
+            }
+        }
+
+        private async void DetailTitleBox_LostFocus(object sender, RoutedEventArgs e)
+        {
+            var box = sender as TextBox;
+
+            // The text box loses focus when a user hits enter... we don't want to run this again
+            // So we check to see if it's still visible
+            if (box.IsVisible())
+            {
+                await this.RenameFinish();
+            }
         }
     }
 }

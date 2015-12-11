@@ -38,6 +38,12 @@ namespace Sbs20.Filenote.Views
                 this.selectedNote = this.notes
                     .Where((item) => item.Name == title)
                     .FirstOrDefault();
+
+                if (this.selectedNote == null && this.notes.Count > 0)
+                {
+                    this.selectedNote = this.notes[0];
+                    this.MasterListView.SelectedItem = this.selectedNote;
+                }
             }
 
             this.UpdateForVisualState(AdaptiveStates.CurrentState);
@@ -169,8 +175,11 @@ namespace Sbs20.Filenote.Views
             var desiredName = box.Text;
             var note = this.selectedNote;
 
-            // Rename
-            await this.notes.RenameNote(note, desiredName);
+            if (note.Name != desiredName)
+            {
+                // Rename
+                await this.notes.RenameNote(note, desiredName);
+            }
 
             // Reenable the list view
             this.MasterListView.IsEnabled = true;
@@ -185,6 +194,16 @@ namespace Sbs20.Filenote.Views
             this.RenameStart();
         }
 
+        private void MasterListView_KeyDown(object sender, KeyRoutedEventArgs e)
+        {
+            if (e.Key == VirtualKey.F2)
+            {
+                // Stop this being handled again
+                e.Handled = true;
+                this.RenameStart();
+            }
+        }
+
         private async void DetailTitleBox_KeyDown(object sender, KeyRoutedEventArgs e)
         {
             if (e.Key == VirtualKey.Enter)
@@ -194,16 +213,6 @@ namespace Sbs20.Filenote.Views
 
                 // Now handle the actual change
                 await this.RenameFinish();
-            }
-        }
-
-        private void MasterListView_KeyDown(object sender, KeyRoutedEventArgs e)
-        {
-            if (e.Key == VirtualKey.F2)
-            {
-                // Stop this being handled again
-                e.Handled = true;
-                this.RenameStart();
             }
         }
 

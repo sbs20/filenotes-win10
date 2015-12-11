@@ -136,16 +136,20 @@
             <ColumnDefinition x:Name="DetailColumn" Width="*" />
         </Grid.ColumnDefinitions>
 
-        <CommandBar
-            Name="commandBar"
-            VerticalAlignment="Top"
-            HorizontalContentAlignment="Stretch">
-            <CommandBar.Content>
-                <TextBlock Text="Notes" Style="{ThemeResource PageTitleTextBlockStyle}"/>
-            </CommandBar.Content>
-            <AppBarButton Name="Add" Icon="Add" Label="Add" Click="Add_Click" />
-            <AppBarButton Name="Delete" Icon="Delete" Label="Delete" Click="Delete_Click"/>
-        </CommandBar>
+        <c:PageHeader>
+            <c:PageHeader.HeaderContent>
+                <CommandBar
+                    Name="commandBar"
+                    VerticalAlignment="Top"
+                    HorizontalContentAlignment="Stretch">
+                    <CommandBar.Content>
+                        <TextBlock Text="Notes" Style="{ThemeResource PageTitleTextBlockStyle}"/>
+                    </CommandBar.Content>
+                    <AppBarButton Name="Add" Icon="Add" Label="Add" Click="Add_Click" />
+                    <AppBarButton Name="Delete" Icon="Delete" Label="Delete" Click="Delete_Click"/>
+                </CommandBar>
+            </c:PageHeader.HeaderContent>
+        </c:PageHeader>
 
         <ListView
             x:Name="MasterListView"
