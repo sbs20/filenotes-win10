@@ -11,6 +11,7 @@ namespace Sbs20.Filenote.ViewModels
         private string name;
         private string text;
         private string originalText;
+        private DateTime dateModified;
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -46,8 +47,18 @@ namespace Sbs20.Filenote.ViewModels
             }
         }
 
+        public DateTime DateModified
+        {
+            get { return this.dateModified; }
+            set
+            {
+                this.dateModified = value;
+                this.OnPropertyChanged("DateModified");
+                this.OnPropertyChanged("DateModifiedString");
+            }
+        }
+
         public DateTime DateCreated { get; set; }
-        public DateTime DateModified { get; set; }
 
         public NoteViewModel()
         {
@@ -62,12 +73,14 @@ namespace Sbs20.Filenote.ViewModels
             }
         }
 
-        public string DateCreatedFull
+        public string DateCreatedString
         {
-            get
-            {
-                return this.DateCreated.ToString("dd MMM yyyy hh:mm:ss");
-            }
+            get { return this.DateCreated.ToString("g"); }
+        }
+
+        public string DateModifiedString
+        {
+            get { return this.DateModified.ToString("g"); }
         }
 
         public bool IsDirty
@@ -82,6 +95,7 @@ namespace Sbs20.Filenote.ViewModels
                 var save = StorageManager.SaveNoteAsync(this);
                 this.originalText = this.Text;
                 await save;
+                this.DateModified = DateTime.Now;
             }
         }
     }

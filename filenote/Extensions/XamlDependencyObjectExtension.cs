@@ -36,5 +36,19 @@ namespace Sbs20.Filenote.Extensions
 
             return list;
         }
+
+        public static bool IsVisible(this DependencyObject child)
+        {
+            var ancestors = child.AllAncestry().OfType<FrameworkElement>();
+            foreach (var ancestor in ancestors)
+            {
+                if (ancestor.Visibility == Visibility.Collapsed)
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
     }
 }

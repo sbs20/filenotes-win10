@@ -9,12 +9,13 @@ using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
 using Sbs20.Filenote.Extensions;
 using Sbs20.Filenote.ViewModels;
+using System.Threading.Tasks;
 
 namespace Sbs20.Filenote.Views
 {
     public sealed partial class MasterDetailPage : Page
     {
-        private NoteViewModel lastSelectedNote;
+        private NoteViewModel selectedNote;
         private NoteCollectionViewModel notes;
 
         public MasterDetailPage()
@@ -34,7 +35,7 @@ namespace Sbs20.Filenote.Views
             {
                 // Parameter is item name
                 var title = (string)e.Parameter;
-                this.lastSelectedNote = this.notes
+                this.selectedNote = this.notes
                     .Where((item) => item.Name == title)
                     .FirstOrDefault();
             }
@@ -55,10 +56,10 @@ namespace Sbs20.Filenote.Views
         {
             var isNarrow = newState == NarrowState;
 
-            if (isNarrow && oldState == this.DefaultState && lastSelectedNote != null)
+            if (isNarrow && oldState == this.DefaultState && selectedNote != null)
             {
                 // Resize down to the detail item. Don't play a transition.
-                Frame.Navigate(typeof(DetailPage), this.lastSelectedNote.Name, new SuppressNavigationTransitionInfo());
+                Frame.Navigate(typeof(DetailPage), this.selectedNote.Name, new SuppressNavigationTransitionInfo());
             }
 
             EntranceNavigationTransitionInfo.SetIsTargetElement(MasterListView, isNarrow);
@@ -71,7 +72,7 @@ namespace Sbs20.Filenote.Views
         private void MasterListView_ItemClick(object sender, ItemClickEventArgs e)
         {
             var clickedItem = (NoteViewModel)e.ClickedItem;
-            lastSelectedNote = clickedItem;
+            selectedNote = clickedItem;
 
             if (this.MasterListView.SelectedItems.Count == 1)
             {
@@ -95,7 +96,7 @@ namespace Sbs20.Filenote.Views
         private void LayoutRoot_Loaded(object sender, RoutedEventArgs e)
         {
             // Assure we are displaying the correct item. This is necessary in certain adaptive cases.
-            MasterListView.SelectedItem = this.lastSelectedNote;
+            MasterListView.SelectedItem = this.selectedNote;
         }
 
         private void EnableContentTransitions()
@@ -128,36 +129,6 @@ namespace Sbs20.Filenote.Views
             }
         }
 
-        private void MasterListView_KeyDown(object sender, KeyRoutedEventArgs e)
-        {
-            if (e.Key == VirtualKey.F2)
-            {
-                var note = this.MasterListView.SelectedItem;
-
-                var container = this.MasterListView.ContainerFromItem(note);
-                var elements = container.AllChildren().OfType<FrameworkElement>();
-                var block = elements.First(c => c.Name == "titleBlock") as TextBlock;
-                var box = elements.First(c => c.Name == "titleBox") as TextBox;
-
-                block.Visibility = Visibility.Collapsed;
-                box.Visibility = Visibility.Visible;
-            }
-        }
-
-        private async void titleBox_LostFocus(object sender, RoutedEventArgs e)
-        {
-            var box = e.OriginalSource as TextBox;
-            FrameworkElement element = box;
-            ListViewItem container = box.AllAncestry().First(el => el is ListViewItem) as ListViewItem;
-            var note = this.MasterListView.ItemFromContainer(container) as NoteViewModel;
-            var block = container.AllChildren().OfType<FrameworkElement>().First(el => el.Name == "titleBlock") as TextBlock;
-
-            block.Visibility = Visibility.Visible;
-            box.Visibility = Visibility.Collapsed;
-
-            await this.notes.RenameNote(note, box.Text);
-        }
-
         private async void Add_Click(object sender, RoutedEventArgs e)
         {
             await this.notes.CreateNote();
@@ -174,6 +145,76 @@ namespace Sbs20.Filenote.Views
             foreach (var note in toBeDeleted)
             {
                 await this.notes.DeleteNote(note);
+            }
+        }
+
+        private void RenameStart()
+        {
+            // First make the alternative header with the textbox visible
+            var header = this.AllChildren().OfType<FrameworkElement>().Where(el => el.Name == "PageHeaderEdit").First();
+            header.Visibility = Visibility.Visible;
+
+            // And disable the list view to stop selecting other notes and confusing matters
+            this.MasterListView.IsEnabled = false;
+        }
+
+        private async Task RenameFinish()
+        {
+            // Make the textbox invisible
+            var header = this.AllChildren().OfType<FrameworkElement>().Where(el => el.Name == "PageHeaderEdit").First();
+            header.Visibility = Visibility.Collapsed;
+
+            // Get the textbox itself
+            var box = (TextBox)header.AllChildren().OfType<TextBox>().First();
+            var desiredName = box.Text;
+            var note = this.selectedNote;
+
+            // Rename
+            await this.notes.RenameNote(note, desiredName);
+
+            // Reenable the list view
+            this.MasterListView.IsEnabled = true;
+
+            // Reset the selected item, otherwise nothing is set. Seems to be lost following disablement
+            this.MasterListView.SelectedItem = this.selectedNote;
+        }
+
+        private void PageHeader_DoubleTapped(object sender, DoubleTappedRoutedEventArgs e)
+        {
+            this.RenameStart();
+        }
+
+        private async void DetailTitleBox_KeyDown(object sender, KeyRoutedEventArgs e)
+        {
+            if (e.Key == VirtualKey.Enter)
+            {
+                // Stop this being handled again
+                e.Handled = true;
+
+                // Now handle the actual change
+                await this.RenameFinish();
+            }
+        }
+
+        private void MasterListView_KeyDown(object sender, KeyRoutedEventArgs e)
+        {
+            if (e.Key == VirtualKey.F2)
+            {
+                // Stop this being handled again
+                e.Handled = true;
+                this.RenameStart();
+            }
+        }
+
+        private async void DetailTitleBox_LostFocus(object sender, RoutedEventArgs e)
+        {
+            var box = sender as TextBox;
+
+            // The text box loses focus when a user hits enter... we don't want to run this again
+            // So we check to see if it's still visible
+            if (box.IsVisible())
+            {
+                await this.RenameFinish();
             }
         }
     }

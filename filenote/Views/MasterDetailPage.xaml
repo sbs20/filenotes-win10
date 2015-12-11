@@ -18,7 +18,7 @@
 
     <Page.Resources>
         <DataTemplate x:Key="MasterListViewItemTemplate" x:DataType="viewmodels:NoteViewModel">
-            <Grid Margin="0,11,0,13">
+            <Grid Margin="0,2,3,2">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
@@ -26,11 +26,10 @@
 
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="100" />
                 </Grid.ColumnDefinitions>
 
-                <TextBlock Text="{x:Bind Name, Mode=OneWay}" Style="{ThemeResource BaseTextBlockStyle}" Name="titleBlock" />
-                <TextBox Text="{x:Bind Name}" Name="titleBox" Visibility="Collapsed" LostFocus="titleBox_LostFocus" />
+                <TextBlock Text="{x:Bind Name, Mode=OneWay}" Style="{ThemeResource BaseTextBlockStyle}"/>
 
                 <TextBlock
                     Text="{x:Bind Text, Mode=OneWay}"
@@ -39,8 +38,10 @@
                     Style="{ThemeResource ListBodyTextBlockStyle}" />
 
                 <TextBlock
-                    Text="{x:Bind DateCreatedFull}"
+                    TextAlignment="Right"
+                    Text="{x:Bind DateModifiedString, Mode=OneWay}"
                     Grid.Column="1"
+                    Grid.RowSpan="2"
                     Margin="12,1,0,0"
                     Style="{ThemeResource ListCaptionAltTextblockStyle}" />
             </Grid>
@@ -58,9 +59,15 @@
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
 
-                <c:PageHeader x:Name="pageHeader">
+                <c:PageHeader x:Name="PageHeader" DoubleTapped="PageHeader_DoubleTapped">
                     <c:PageHeader.HeaderContent>
-                        <TextBlock x:Name="title" Style="{ThemeResource PageTitleTextBlockStyle}" Text="{x:Bind Name}"/>
+                        <TextBlock x:Name="title" Style="{ThemeResource PageTitleTextBlockStyle}" Text="{x:Bind Name, Mode=OneWay}"/>
+                    </c:PageHeader.HeaderContent>
+                </c:PageHeader>
+
+                <c:PageHeader x:Name="PageHeaderEdit" Visibility="Collapsed">
+                    <c:PageHeader.HeaderContent>
+                        <TextBox FontSize="26" x:Name="DetailTitleBox" Text="{x:Bind Name, Mode=OneWay}" KeyDown="DetailTitleBox_KeyDown" LostFocus="DetailTitleBox_LostFocus"/>
                     </c:PageHeader.HeaderContent>
                 </c:PageHeader>
 
