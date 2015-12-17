@@ -16,6 +16,19 @@
         </TransitionCollection>
     </Page.Transitions>
 
+    <Page.BottomAppBar>
+        <CommandBar>
+            <AppBarButton x:Name="Multiselect" Label="Select Items" Click="Multiselect_Click">
+                <AppBarButton.Icon>
+                    <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xe762;" />
+                </AppBarButton.Icon>
+            </AppBarButton>
+            <AppBarButton x:Name="Add" Label="Add" Icon="Add" Click="Add_Click" />
+            <AppBarButton x:Name="Delete" Label="Delete" Icon="Delete" Click="Delete_Click" />
+            <AppBarButton x:Name="CancelMultiselect" Label="Cancel" Icon="Cancel" Click="CancelMultiselect_Click" />
+        </CommandBar>
+    </Page.BottomAppBar>
+
     <Page.Resources>
         <DataTemplate x:Key="MasterListViewItemTemplate" x:DataType="viewmodels:NoteViewModel">
             <Grid Margin="0,2,3,2">
@@ -124,6 +137,35 @@
                     </VisualState.Setters>
                 </VisualState>
             </VisualStateGroup>
+
+            <VisualStateGroup x:Name="MasterDetailsStatesGroup">
+                <VisualState x:Name="MasterState">
+                    <VisualState.Setters>
+                        <Setter Target="MasterListView.SelectionMode" Value="Single" />
+                        <Setter Target="MasterListView.IsItemClickEnabled" Value="True" />
+                        <Setter Target="DetailContentPresenter.Visibility" Value="Visible" />
+                        <!--#region App Bar Commands-->
+                        <Setter Target="Multiselect.Visibility" Value="Visible" />
+                        <Setter Target="Add.Visibility" Value="Visible" />
+                        <Setter Target="Delete.Visibility" Value="Collapsed" />
+                        <Setter Target="CancelMultiselect.Visibility" Value="Collapsed" />
+                        <!--#endregion-->
+                    </VisualState.Setters>
+                </VisualState>
+                <VisualState x:Name="MultipleSelectionState">
+                    <VisualState.Setters>
+                        <Setter Target="MasterListView.SelectionMode" Value="Multiple" />
+                        <Setter Target="MasterListView.IsItemClickEnabled" Value="False" />
+                        <Setter Target="DetailContentPresenter.Visibility" Value="Collapsed" />
+                        <!--#region App Bar Commands-->
+                        <Setter Target="Multiselect.Visibility" Value="Collapsed" />
+                        <Setter Target="Add.Visibility" Value="Collapsed" />
+                        <Setter Target="Delete.Visibility" Value="Visible" />
+                        <Setter Target="CancelMultiselect.Visibility" Value="Visible" />
+                        <!--#endregion-->
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
         </VisualStateManager.VisualStateGroups>
 
         <Grid.RowDefinitions>
@@ -138,16 +180,7 @@
 
         <c:PageHeader>
             <c:PageHeader.HeaderContent>
-                <CommandBar
-                    Name="commandBar"
-                    VerticalAlignment="Top"
-                    HorizontalContentAlignment="Stretch">
-                    <CommandBar.Content>
-                        <TextBlock Text="Notes" Style="{ThemeResource PageTitleTextBlockStyle}"/>
-                    </CommandBar.Content>
-                    <AppBarButton Name="Add" Icon="Add" Label="Add" Click="Add_Click" />
-                    <AppBarButton Name="Delete" Icon="Delete" Label="Delete" Click="Delete_Click"/>
-                </CommandBar>
+                <TextBlock Text="Notes" Style="{ThemeResource PageTitleTextBlockStyle}"/>
             </c:PageHeader.HeaderContent>
         </c:PageHeader>
 
@@ -157,7 +190,6 @@
             ItemContainerTransitions="{x:Null}"
             ItemTemplate="{StaticResource MasterListViewItemTemplate}"
             IsItemClickEnabled="True"
-            SelectionMode="Extended"
             ItemClick="MasterListView_ItemClick"
             KeyDown="MasterListView_KeyDown">
             <ListView.ItemContainerStyle>

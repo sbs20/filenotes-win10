@@ -38,19 +38,27 @@ namespace Sbs20.Filenote.Views
                 this.selectedNote = this.notes
                     .Where((item) => item.Name == title)
                     .FirstOrDefault();
-
-                if (this.selectedNote == null && this.notes.Count > 0)
-                {
-                    this.selectedNote = this.notes[0];
-                    this.MasterListView.SelectedItem = this.selectedNote;
-                }
             }
 
+            this.SelectMostAppropriateNote();
+
             this.UpdateForVisualState(AdaptiveStates.CurrentState);
+
+            VisualStateManager.GoToState(this, this.MasterState.Name, true);
 
             // Don't play a content transition for first item load.
             // Sometimes, this content will be animated as part of the page transition.
             this.DisableContentTransitions();
+        }
+
+        private void SelectMostAppropriateNote()
+        {
+            if (this.selectedNote == null && this.notes.Count > 0)
+            {
+                this.selectedNote = this.notes[0];
+            }
+
+            this.MasterListView.SelectedItem = this.selectedNote;
         }
 
         private void AdaptiveStates_CurrentStateChanged(object sender, VisualStateChangedEventArgs e)
@@ -77,32 +85,34 @@ namespace Sbs20.Filenote.Views
 
         private void MasterListView_ItemClick(object sender, ItemClickEventArgs e)
         {
-            var clickedItem = (NoteViewModel)e.ClickedItem;
-            selectedNote = clickedItem;
-
-            if (this.MasterListView.SelectedItems.Count == 1)
+            if (this.MasterDetailsStatesGroup.CurrentState != this.MultipleSelectionState)
             {
-                if (AdaptiveStates.CurrentState == NarrowState)
+                this.selectedNote = (NoteViewModel)e.ClickedItem;
+
+                if (this.MasterListView.SelectedItems.Count == 1)
                 {
-                    // Use "drill in" transition for navigating from master list to detail view
-                    Frame.Navigate(typeof(DetailPage), clickedItem.Name, new DrillInNavigationTransitionInfo());
+                    if (AdaptiveStates.CurrentState == NarrowState)
+                    {
+                        // Use "drill in" transition for navigating from master list to detail view
+                        Frame.Navigate(typeof(DetailPage), this.selectedNote.Name, new DrillInNavigationTransitionInfo());
+                    }
+                    else
+                    {
+                        // Play a refresh animation when the user switches detail items.
+                        EnableContentTransitions();
+                    }
                 }
                 else
                 {
-                    // Play a refresh animation when the user switches detail items.
-                    EnableContentTransitions();
+
                 }
-            }
-            else
-            {
-                
             }
         }
 
         private void LayoutRoot_Loaded(object sender, RoutedEventArgs e)
         {
             // Assure we are displaying the correct item. This is necessary in certain adaptive cases.
-            MasterListView.SelectedItem = this.selectedNote;
+            this.MasterListView.SelectedItem = this.selectedNote;
         }
 
         private void EnableContentTransitions()
@@ -226,6 +236,20 @@ namespace Sbs20.Filenote.Views
             {
                 await this.RenameFinish();
             }
+        }
+
+        private void Multiselect_Click(object sender, RoutedEventArgs e)
+        {
+            if (this.MasterListView.Items.Count > 0)
+            {
+                VisualStateManager.GoToState(this, this.MultipleSelectionState.Name, true);
+                this.MasterListView.SelectedItem = null;
+            }
+        }
+
+        private void CancelMultiselect_Click(object sender, RoutedEventArgs e)
+        {
+            VisualStateManager.GoToState(this, this.MasterState.Name, true);
         }
     }
 }
