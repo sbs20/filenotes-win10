@@ -84,26 +84,22 @@
                     </c:PageHeader.HeaderContent>
                 </c:PageHeader>
 
-                <ScrollViewer
+                <TextBox 
+                    Name="NoteTextBox"
                     Grid.Row="1"
                     Padding="10, 10"
-                    VerticalScrollBarVisibility="Auto"
-                    HorizontalScrollBarVisibility="Auto">
-                    <StackPanel>
-                        <TextBox 
-                            Style="{ThemeResource NoteTextStyle}"
-                            Padding="0"
-                            BorderThickness="0"
-                            FontFamily="Consolas"
-                            Visibility="Visible"
-                            HorizontalAlignment="Stretch"
-                            VerticalAlignment="Stretch"
-                            AcceptsReturn="True"
-                            LostFocus="NoteText_LostFocus"
-                            Text="{Binding Path=Text, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
-                        </TextBox>
-                    </StackPanel>
-                </ScrollViewer>
+                    Style="{ThemeResource NoteTextStyle}"
+                    BorderThickness="0"
+                    FontFamily="Consolas"
+                    Visibility="Visible"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch"
+                    ScrollViewer.VerticalScrollBarVisibility="Auto"
+                    ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                    AcceptsReturn="True"
+                    LostFocus="NoteTextBox_LostFocus"
+                    Text="{Binding Path=Text, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                </TextBox>
             </Grid>
         </DataTemplate>
     </Page.Resources>

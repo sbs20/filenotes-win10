@@ -129,7 +129,7 @@ namespace Sbs20.Filenote.Views
             }
         }
 
-        private async void NoteText_LostFocus(object sender, RoutedEventArgs e)
+        private async void NoteTextBox_LostFocus(object sender, RoutedEventArgs e)
         {
             // Do saves
             await this.notes.SaveAllAsync();
