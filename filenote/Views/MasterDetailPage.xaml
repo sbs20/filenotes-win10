@@ -90,13 +90,6 @@
                     VerticalScrollBarVisibility="Auto"
                     HorizontalScrollBarVisibility="Auto">
                     <StackPanel>
-                        <TextBlock
-                            Visibility="Collapsed"
-                            Margin="0,9"
-                            HorizontalAlignment="Left"
-                            Style="{ThemeResource BodyTextBlockStyle}"
-                            Text="{x:Bind Text}" />
-
                         <TextBox 
                             Style="{ThemeResource NoteTextStyle}"
                             Padding="0"
