@@ -135,16 +135,6 @@ namespace Sbs20.Filenote.Views
             await this.notes.SaveAllAsync();
         }
 
-        private void NoteText_TextChanged(object sender, RoutedEventArgs e)
-        {
-            var textBox = (TextBox)sender;
-            var note = (NoteViewModel)textBox.DataContext;
-            if (note != null)
-            {
-                note.Text = textBox.Text;
-            }
-        }
-
         private async void Add_Click(object sender, RoutedEventArgs e)
         {
             await this.notes.CreateNote();

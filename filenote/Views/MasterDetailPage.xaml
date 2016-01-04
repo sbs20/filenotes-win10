@@ -107,8 +107,7 @@
                             VerticalAlignment="Stretch"
                             AcceptsReturn="True"
                             LostFocus="NoteText_LostFocus"
-                            TextChanged="NoteText_TextChanged"
-                            Text="{x:Bind Path=Text}">
+                            Text="{Binding Path=Text, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                         </TextBox>
                     </StackPanel>
                 </ScrollViewer>
