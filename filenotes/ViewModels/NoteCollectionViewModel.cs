@@ -34,7 +34,7 @@ namespace Sbs20.Filenote.ViewModels
         public async Task LoadAsync()
         {
             this.Clear();
-            var notes = await StorageManager.GetAllNotesAsync();
+            var notes = await StorageManager.LoadNotesAsync();
             foreach (var note in notes)
             {
                 this.Add(note as NoteViewModel);

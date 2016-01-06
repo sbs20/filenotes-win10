@@ -16,7 +16,7 @@ namespace Sbs20.Filenote.Data
             cache = null;
         }
 
-        public static async Task<IList<INote>> GetAllNotesAsync()
+        public static async Task<IList<INote>> LoadNotesAsync()
         {
             if (cache == null)
             {
@@ -40,9 +40,9 @@ namespace Sbs20.Filenote.Data
             return cache ?? new List<INote>();
         }
 
-        public static async Task<INote> GetNoteByNameAsync(string name)
+        public static async Task<INote> LoadNoteAsync(string name)
         {
-            var notes = await GetAllNotesAsync();
+            var notes = await LoadNotesAsync();
             return notes.Where(n => n.Name == name).FirstOrDefault();
         }
 

@@ -39,7 +39,7 @@ namespace Sbs20.Filenote.Views
             base.OnNavigatedTo(e);
 
             // Parameter is item ID
-            this.Note = await StorageManager.GetNoteByNameAsync((string)e.Parameter) as NoteViewModel;
+            this.Note = await StorageManager.LoadNoteAsync((string)e.Parameter) as NoteViewModel;
             
             var backStack = Frame.BackStack;
             var backStackCount = backStack.Count;
