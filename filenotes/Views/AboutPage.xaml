@@ -17,25 +17,25 @@
 
         <c:PageHeader x:Name="pageHeader">
             <c:PageHeader.HeaderContent>
-                <TextBlock x:Name="title" Style="{ThemeResource PageTitleTextBlockStyle}" Text="About Filenote"/>
+                <TextBlock x:Name="title" Style="{ThemeResource PageTitleTextBlockStyle}" Text="About Filenotes"/>
             </c:PageHeader.HeaderContent>
         </c:PageHeader>
 
         <ScrollViewer Grid.Row="1" EntranceNavigationTransitionInfo.IsTargetElement="True" Margin="12,4,0,0">
             <StackPanel >
-                <TextBlock Style="{ThemeResource SubtitleTextBlockStyle}" Margin="12,12,12,4">Overview</TextBlock>
-                <TextBlock Style="{ThemeResource BodyTextBlockStyle}" Margin="12,4">This is a simple note taking app
+                <TextBlock Style="{ThemeResource SubtitleTextBlockStyle}" Margin="0, 10">Overview</TextBlock>
+                <TextBlock Style="{ThemeResource BodyTextBlockStyle}">This is a simple note taking app
                     which stores notes as files on the filesystem. You can then use your own cloud backup - OneDrive,
                     Dropbox, GoogleDrive etc - to keep everything up to date.
                 </TextBlock>
 
-                <TextBlock Style="{ThemeResource SubtitleTextBlockStyle}" Margin="12,12,12,4">License</TextBlock>
-                <TextBlock Style="{ThemeResource BodyTextBlockStyle}" Margin="12,4">This software is free to use
+                <TextBlock Style="{ThemeResource SubtitleTextBlockStyle}" Margin="0, 10">License</TextBlock>
+                <TextBlock Style="{ThemeResource BodyTextBlockStyle}">This software is free to use
                     for business or personal use. It is open source and released under the GPL2 license.
                 </TextBlock>
 
-                <TextBlock Style="{ThemeResource SubtitleTextBlockStyle}" Margin="12,12,12,4">Copyright</TextBlock>
-                <TextBlock Style="{ThemeResource BodyTextBlockStyle}" Margin="12,4">Sam Strachan 2015
+                <TextBlock Style="{ThemeResource SubtitleTextBlockStyle}" Margin="0, 10">Copyright</TextBlock>
+                <TextBlock Style="{ThemeResource BodyTextBlockStyle}">Sam Strachan 2015 - 2016
                 </TextBlock>
             </StackPanel>
         </ScrollViewer>
