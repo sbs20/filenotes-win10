@@ -9,17 +9,8 @@ namespace Sbs20.Filenote.Data
 {
     public class StorageManager
     {
-        private static List<INote> cache = null;
-
-        public static void ClearCache()
-        {
-            cache = null;
-        }
-
         public static async Task<IList<INote>> LoadNotesAsync()
         {
-            if (cache == null)
-            {
                 var folder = await Settings.GetStorageFolderAsync();
                 var files = await folder.GetFilesAsync();
                 var notes = files
@@ -34,10 +25,7 @@ namespace Sbs20.Filenote.Data
                         return note;
                     });
 
-                cache = new List<INote>(await Task.WhenAll(notes));
-            }
-
-            return cache ?? new List<INote>();
+                return new List<INote>(await Task.WhenAll(notes));
         }
 
         public static async Task<INote> LoadNoteAsync(string name)

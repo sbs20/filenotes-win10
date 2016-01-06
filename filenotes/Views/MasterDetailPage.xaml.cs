@@ -53,12 +53,21 @@ namespace Sbs20.Filenote.Views
 
         private void SelectMostAppropriateNote()
         {
-            if (this.selectedNote == null && this.notes.Count > 0)
+            if (this.notes.Count > 0)
             {
-                this.selectedNote = this.notes[0];
-            }
+                if (this.selectedNote == null)
+                {
+                    this.selectedNote = this.notes[0];
+                }
+                else if (!this.MasterListView.Items.Contains(this.selectedNote))
+                {
+                    // If we're navigating back to this page then we reload all the notes from disk in which
+                    // case we will have new references.
+                    this.selectedNote = this.notes.Where(n => n.Name == this.selectedNote.Name).FirstOrDefault();
+                }
 
-            this.MasterListView.SelectedItem = this.selectedNote;
+                this.MasterListView.SelectedItem = this.selectedNote;
+            }
         }
 
         private void AdaptiveStates_CurrentStateChanged(object sender, VisualStateChangedEventArgs e)
