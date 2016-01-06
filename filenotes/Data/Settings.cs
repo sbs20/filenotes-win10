@@ -5,7 +5,7 @@ using Windows.Storage.AccessCache;
 using Windows.Storage.Pickers;
 using Windows.UI.Xaml;
 
-namespace Sbs20.Filenote.Data
+namespace Sbs20.Filenotes.Data
 {
     public class Settings
     {

@@ -7,7 +7,7 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Animation;
 
-namespace Sbs20.Filenote.Controls
+namespace Sbs20.Filenotes.Controls
 {
     /// <summary>
     /// A specialized ListView to represent the items in the navigation menu.

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 
-namespace Sbs20.Filenote.Data
+namespace Sbs20.Filenotes.Data
 {
     public interface INote
     {

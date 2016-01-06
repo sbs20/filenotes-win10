@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Media;
 
-namespace Sbs20.Filenote.Extensions
+namespace Sbs20.Filenotes.Extensions
 {
     public static class XamlDependencyObjectExtension
     {

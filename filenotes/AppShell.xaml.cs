@@ -8,11 +8,11 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Navigation;
-using Sbs20.Filenote.Controls;
-using Sbs20.Filenote.ViewModels;
-using Sbs20.Filenote.Views;
+using Sbs20.Filenotes.Controls;
+using Sbs20.Filenotes.ViewModels;
+using Sbs20.Filenotes.Views;
 
-namespace Sbs20.Filenote
+namespace Sbs20.Filenotes
 {
     /// <summary>
     /// The "chrome" layer of the app that provides top-level navigation with

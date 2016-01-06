@@ -7,11 +7,11 @@ using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
-using Sbs20.Filenote.Extensions;
-using Sbs20.Filenote.ViewModels;
+using Sbs20.Filenotes.Extensions;
+using Sbs20.Filenotes.ViewModels;
 using System.Threading.Tasks;
 
-namespace Sbs20.Filenote.Views
+namespace Sbs20.Filenotes.Views
 {
     public sealed partial class MasterDetailPage : Page
     {

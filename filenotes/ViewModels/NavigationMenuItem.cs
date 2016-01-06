@@ -1,7 +1,7 @@
 ﻿using System;
 using Windows.UI.Xaml.Controls;
 
-namespace Sbs20.Filenote.ViewModels
+namespace Sbs20.Filenotes.ViewModels
 {
     public class NavigationMenuItem
     {

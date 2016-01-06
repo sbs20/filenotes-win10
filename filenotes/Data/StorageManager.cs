@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Windows.Storage;
 using Windows.Storage.FileProperties;
 
-namespace Sbs20.Filenote.Data
+namespace Sbs20.Filenotes.Data
 {
     public class StorageManager
     {

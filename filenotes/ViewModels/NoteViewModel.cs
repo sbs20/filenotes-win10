@@ -1,10 +1,10 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Threading.Tasks;
-using Sbs20.Filenote.Data;
+using Sbs20.Filenotes.Data;
 using Windows.Globalization.DateTimeFormatting;
 
-namespace Sbs20.Filenote.ViewModels
+namespace Sbs20.Filenotes.ViewModels
 {
     public class NoteViewModel : INotifyPropertyChanged, INote
     {

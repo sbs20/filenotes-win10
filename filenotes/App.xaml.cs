@@ -3,13 +3,13 @@ using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Navigation;
-using Sbs20.Filenote.Views;
+using Sbs20.Filenotes.Views;
 using Windows.Storage;
-using Sbs20.Filenote.Data;
+using Sbs20.Filenotes.Data;
 
 // The Blank Application template is documented at http://go.microsoft.com/fwlink/?LinkId=402347&clcid=0x409
 
-namespace Sbs20.Filenote
+namespace Sbs20.Filenotes
 {
     /// <summary>
     /// Provides application-specific behavior to supplement the default Application class.

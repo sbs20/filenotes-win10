@@ -12,11 +12,11 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
-using Sbs20.Filenote.Data;
+using Sbs20.Filenotes.Data;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
 
-namespace Sbs20.Filenote.Views
+namespace Sbs20.Filenotes.Views
 {
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.

@@ -2,9 +2,9 @@
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
-using Sbs20.Filenote.Data;
+using Sbs20.Filenotes.Data;
 
-namespace Sbs20.Filenote.ViewModels
+namespace Sbs20.Filenotes.ViewModels
 {
     public class NoteCollectionViewModel : ObservableCollection<NoteViewModel>
     {
