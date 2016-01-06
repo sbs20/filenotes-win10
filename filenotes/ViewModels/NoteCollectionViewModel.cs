@@ -45,7 +45,7 @@ namespace Sbs20.Filenote.ViewModels
         {
             foreach (var note in this)
             {
-                await note.SyncNoteViewModelAsync();
+                await note.SaveAsync();
             }
         }
 

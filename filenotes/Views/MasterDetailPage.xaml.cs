@@ -92,11 +92,14 @@ namespace Sbs20.Filenote.Views
             }
         }
 
-        private void MasterListView_ItemClick(object sender, ItemClickEventArgs e)
+        private async void MasterListView_ItemClick(object sender, ItemClickEventArgs e)
         {
             if (this.MasterDetailsStatesGroup.CurrentState != this.MultipleSelectionState)
             {
                 this.selectedNote = (NoteViewModel)e.ClickedItem;
+
+                // Force a reload of the file in case it's changed in the background
+                await this.selectedNote.ReloadAsync();
 
                 if (this.MasterListView.SelectedItems.Count == 1)
                 {

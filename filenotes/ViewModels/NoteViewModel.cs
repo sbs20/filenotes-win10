@@ -88,7 +88,14 @@ namespace Sbs20.Filenote.ViewModels
             get { return this.originalText != this.Text; }
         }
 
-        public async Task SyncNoteViewModelAsync()
+        public async Task ReloadAsync()
+        {
+            var note = await StorageManager.LoadNoteAsync(this.Name);
+            this.Text = note.Text;
+            this.DateModified = note.DateModified;
+        }
+
+        public async Task SaveAsync()
         {
             if (this.IsDirty)
             {

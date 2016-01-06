@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 
 namespace Sbs20.Filenote.Data
 {
@@ -8,5 +9,7 @@ namespace Sbs20.Filenote.Data
         DateTime DateModified { get; set; }
         string Name { get; set; }
         string Text { get; set; }
+        Task ReloadAsync();
+        Task SaveAsync();
     }
 }
