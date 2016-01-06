@@ -55,15 +55,16 @@ namespace Sbs20.Filenote.Views
         {
             if (this.notes.Count > 0)
             {
-                if (this.selectedNote == null)
-                {
-                    this.selectedNote = this.notes[0];
-                }
-                else if (!this.MasterListView.Items.Contains(this.selectedNote))
+                if (this.selectedNote != null && !this.MasterListView.Items.Contains(this.selectedNote))
                 {
                     // If we're navigating back to this page then we reload all the notes from disk in which
                     // case we will have new references.
                     this.selectedNote = this.notes.Where(n => n.Name == this.selectedNote.Name).FirstOrDefault();
+                }
+
+                if (this.selectedNote == null)
+                {
+                    this.selectedNote = this.notes[0];
                 }
 
                 this.MasterListView.SelectedItem = this.selectedNote;
@@ -155,6 +156,9 @@ namespace Sbs20.Filenote.Views
         private async void Delete_Click(object sender, RoutedEventArgs e)
         {
             IList<NoteViewModel> toBeDeleted = new List<NoteViewModel>();
+
+            // We have to make a temporary list of things to delete as doing so in the loop
+            // will invalidate the IEnumerable
             foreach (NoteViewModel note in this.MasterListView.SelectedItems)
             {
                 toBeDeleted.Add(note);
@@ -252,6 +256,12 @@ namespace Sbs20.Filenote.Views
         private void CancelMultiselect_Click(object sender, RoutedEventArgs e)
         {
             VisualStateManager.GoToState(this, this.MasterState.Name, true);
+        }
+
+        private async void Refresh_Click(object sender, RoutedEventArgs e)
+        {
+            await this.notes.LoadAsync();
+            this.SelectMostAppropriateNote();
         }
     }
 }

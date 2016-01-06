@@ -24,6 +24,7 @@
                 </AppBarButton.Icon>
             </AppBarButton>
             <AppBarButton x:Name="Add" Label="Add" Icon="Add" Click="Add_Click" />
+            <AppBarButton x:Name="Refresh" Label="Refresh" Icon="Refresh" Click="Refresh_Click" />
             <AppBarButton x:Name="Delete" Label="Delete" Icon="Delete" Click="Delete_Click" />
             <AppBarButton x:Name="CancelMultiselect" Label="Cancel" Icon="Cancel" Click="CancelMultiselect_Click" />
         </CommandBar>
@@ -135,6 +136,7 @@
                         <!--#region App Bar Commands-->
                         <Setter Target="Multiselect.Visibility" Value="Visible" />
                         <Setter Target="Add.Visibility" Value="Visible" />
+                        <Setter Target="Refresh.Visibility" Value="Visible" />
                         <Setter Target="Delete.Visibility" Value="Collapsed" />
                         <Setter Target="CancelMultiselect.Visibility" Value="Collapsed" />
                         <!--#endregion-->
@@ -148,6 +150,7 @@
                         <!--#region App Bar Commands-->
                         <Setter Target="Multiselect.Visibility" Value="Collapsed" />
                         <Setter Target="Add.Visibility" Value="Collapsed" />
+                        <Setter Target="Refresh.Visibility" Value="Collapsed" />
                         <Setter Target="Delete.Visibility" Value="Visible" />
                         <Setter Target="CancelMultiselect.Visibility" Value="Visible" />
                         <!--#endregion-->
