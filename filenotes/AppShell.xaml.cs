@@ -11,6 +11,7 @@ using Windows.UI.Xaml.Navigation;
 using Sbs20.Filenotes.Controls;
 using Sbs20.Filenotes.ViewModels;
 using Sbs20.Filenotes.Views;
+using Windows.UI.ViewManagement;
 
 namespace Sbs20.Filenotes
 {
@@ -69,6 +70,8 @@ namespace Sbs20.Filenotes
                     // DisplayMode changes.
                     this.CheckTogglePaneButtonSizeChanged();
                 });
+
+            ApplicationView.GetForCurrentView().SetPreferredMinSize(new Size(320, 500));
 
             SystemNavigationManager.GetForCurrentView().BackRequested += SystemNavigationManager_BackRequested;
 
