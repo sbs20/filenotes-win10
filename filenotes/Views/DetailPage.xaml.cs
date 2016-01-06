@@ -10,6 +10,7 @@ using Windows.UI.Xaml.Input;
 using Sbs20.Filenotes.Extensions;
 using System.Linq;
 using System.Threading.Tasks;
+using System;
 
 namespace Sbs20.Filenotes.Views
 {
@@ -38,7 +39,7 @@ namespace Sbs20.Filenotes.Views
         {
             base.OnNavigatedTo(e);
 
-            // Parameter is item ID
+            // Parameter is the note's name
             this.Note = await StorageManager.LoadNoteAsync((string)e.Parameter) as NoteViewModel;
             
             var backStack = Frame.BackStack;
@@ -63,10 +64,18 @@ namespace Sbs20.Filenotes.Views
             SystemNavigationManager.GetForCurrentView().BackRequested += DetailPage_BackRequested;
         }
 
-        protected override void OnNavigatedFrom(NavigationEventArgs e)
+        protected async override void OnNavigatedFrom(NavigationEventArgs e)
         {
-            base.OnNavigatedFrom(e);
+            // Try and save first...
+            // Under extreme navigation circumstances (mostly if you're switching adaptive states
+            // very quickly) this.Note can be null... null is bad
+            if (this.Note != null)
+            {
+                await this.Note.SaveAsync();
+            }
 
+            // As you were
+            base.OnNavigatedFrom(e);
             SystemNavigationManager.GetForCurrentView().BackRequested -= DetailPage_BackRequested;
         }
 
@@ -74,7 +83,6 @@ namespace Sbs20.Filenotes.Views
         {
             // Page above us will be our master view.
             // Make sure we are using the "drill out" animation in this transition.
-            
             Frame.GoBack(new DrillInNavigationTransitionInfo());
         }
 
@@ -141,17 +149,19 @@ namespace Sbs20.Filenotes.Views
         {
             // Mark event as handled so we don't get bounced out of the app.
             e.Handled = true;
-
             OnBackRequested();
+        }
+
+        private void NoteTextBox_LostFocus(object sender, RoutedEventArgs e)
+        {
+            // We can't do saves here because the two way binding hasn't occurred yet.
+            // See - OnNavigateFrom()
         }
 
         private void RenameStart()
         {
             var headerEdit = this.AllChildren().OfType<FrameworkElement>().Where(el => el.Name == "PageHeaderEdit").First();
             headerEdit.Visibility = Visibility.Visible;
-
-            var header = this.AllChildren().OfType<FrameworkElement>().Where(el => el.Name == "PageHeader").First();
-            header.Visibility = Visibility.Collapsed;
         }
 
         private async Task RenameFinish()

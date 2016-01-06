@@ -70,16 +70,16 @@
 
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
 
-                <c:PageHeader x:Name="PageHeader" DoubleTapped="PageHeader_DoubleTapped">
+                <c:PageHeader x:Name="PageHeader" Grid.Row="0" DoubleTapped="PageHeader_DoubleTapped">
                     <c:PageHeader.HeaderContent>
                         <TextBlock x:Name="title" Style="{ThemeResource PageTitleTextBlockStyle}" Text="{x:Bind Name, Mode=OneWay}"/>
                     </c:PageHeader.HeaderContent>
                 </c:PageHeader>
 
-                <c:PageHeader x:Name="PageHeaderEdit" Visibility="Collapsed">
+                <!-- Edit header occupies the same grid space but is invisible -->
+                <c:PageHeader x:Name="PageHeaderEdit" Grid.Row="0" Visibility="Collapsed">
                     <c:PageHeader.HeaderContent>
                         <TextBox FontSize="26" x:Name="DetailTitleBox" Text="{x:Bind Name, Mode=OneWay}" KeyDown="DetailTitleBox_KeyDown" LostFocus="DetailTitleBox_LostFocus"/>
                     </c:PageHeader.HeaderContent>

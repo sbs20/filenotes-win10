@@ -4,7 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:local="using:Sbs20.Filenotes"
+    xmlns:local="using:Sbs20.Filenotes.Views"
     xmlns:c="using:Sbs20.Filenotes.Controls"
     mc:Ignorable="d"
     x:Name="PageRoot"
@@ -17,39 +17,56 @@
             <NavigationThemeTransition />
         </TransitionCollection>
     </Page.Transitions>
-    
-    <!-- Don't realize our content by default. See PageRoot_Loaded. -->
-    <StackPanel x:Name="RootPanel" x:DeferLoadStrategy="Lazy">
-        <StackPanel Orientation="Horizontal">
 
-            <c:PageHeader x:Name="PageHeader" DoubleTapped="PageHeader_DoubleTapped">
-                <c:PageHeader.HeaderContent>
-                    <CommandBar
-                        VerticalAlignment="Top"
-                        HorizontalContentAlignment="Stretch"
-                        Width="Auto">
-                        <CommandBar.Content>
-                            <TextBlock Text="{x:Bind Note.Name, Mode=OneWay}" Style="{ThemeResource PageTitleTextBlockStyle}"/>
-                        </CommandBar.Content>
-                        <AppBarButton Name="BackButton" Icon="Back" Label="Back" Click="BackButton_Click" />
-                    </CommandBar>
-                </c:PageHeader.HeaderContent>
-            </c:PageHeader>
+    <Page.Resources>
+        <local:NoopConverter x:Key="NoopConverter" />
+    </Page.Resources>
 
-            <c:PageHeader x:Name="PageHeaderEdit" Visibility="Collapsed">
-                <c:PageHeader.HeaderContent>
-                    <TextBox FontSize="26" x:Name="DetailTitleBox" Text="{x:Bind Note.Name, Mode=OneWay}" KeyDown="DetailTitleBox_KeyDown" LostFocus="DetailTitleBox_LostFocus"/>
-                </c:PageHeader.HeaderContent>
-            </c:PageHeader>
-            
-        </StackPanel>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
 
-        <TextBlock
-            Margin="12,8"
-            HorizontalAlignment="Left"
-            MaxWidth="560"
-            Style="{ThemeResource BodyTextBlockStyle}"
-            Text="{x:Bind Note.Text, Mode=OneWay}"
-            EntranceNavigationTransitionInfo.IsTargetElement="True" />
-    </StackPanel>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <c:PageHeader x:Name="PageHeader" Grid.Row="0" DoubleTapped="PageHeader_DoubleTapped">
+            <c:PageHeader.HeaderContent>
+                <CommandBar VerticalAlignment="Top" HorizontalContentAlignment="Stretch">
+                    <CommandBar.Content>
+                        <TextBlock Text="{x:Bind Note.Name, Mode=OneWay}" Style="{ThemeResource PageTitleTextBlockStyle}"/>
+                    </CommandBar.Content>
+                    <AppBarButton Name="BackButton" Icon="Back" Label="Back" Click="BackButton_Click" />
+                </CommandBar>
+            </c:PageHeader.HeaderContent>
+        </c:PageHeader>
+
+        <!-- Edit header occupies the same grid space but is invisible -->
+        <c:PageHeader x:Name="PageHeaderEdit" Grid.Row="0" Visibility="Collapsed">
+            <c:PageHeader.HeaderContent>
+                <TextBox FontSize="26" x:Name="DetailTitleBox" Text="{x:Bind Note.Name, Mode=OneWay}" KeyDown="DetailTitleBox_KeyDown" LostFocus="DetailTitleBox_LostFocus"/>
+            </c:PageHeader.HeaderContent>
+        </c:PageHeader>
+
+        <TextBox 
+            Name="NoteTextBox"
+            Grid.Row="1"
+            Padding="10, 10"
+            Style="{ThemeResource NoteTextStyle}"
+            BorderThickness="0"
+            FontFamily="Consolas"
+            Visibility="Visible"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Stretch"
+            ScrollViewer.VerticalScrollBarVisibility="Auto"
+            ScrollViewer.HorizontalScrollBarVisibility="Auto"
+            AcceptsReturn="True"
+            LostFocus="NoteTextBox_LostFocus"
+            Text="{x:Bind Path=Note.Text, Mode=TwoWay, Converter={StaticResource NoopConverter}}">
+        </TextBox>
+
+    </Grid>
+
 </Page>
