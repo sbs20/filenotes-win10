@@ -91,8 +91,15 @@ namespace Sbs20.Filenotes.ViewModels
         public async Task ReloadAsync()
         {
             var note = await StorageManager.LoadNoteAsync(this.Name);
-            this.Text = note.Text;
-            this.DateModified = note.DateModified;
+            if (note != null)
+            {
+                this.Text = note.Text;
+                this.DateModified = note.DateModified;
+            }
+            else
+            {
+                throw new InvalidOperationException(Constants.FileNotFoundException);
+            }
         }
 
         public async Task SaveAsync()

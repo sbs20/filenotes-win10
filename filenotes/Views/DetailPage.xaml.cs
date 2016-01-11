@@ -1,16 +1,16 @@
-﻿using Windows.UI.Core;
+﻿using System;
+using System.Linq;
+using System.Threading.Tasks;
+using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
-using Sbs20.Filenotes.Data;
-using Sbs20.Filenotes.ViewModels;
 using Windows.System;
 using Windows.UI.Xaml.Input;
+using Sbs20.Filenotes.Data;
+using Sbs20.Filenotes.ViewModels;
 using Sbs20.Filenotes.Extensions;
-using System.Linq;
-using System.Threading.Tasks;
-using System;
 
 namespace Sbs20.Filenotes.Views
 {

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Windows.System;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -9,7 +10,8 @@ using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
 using Sbs20.Filenotes.Extensions;
 using Sbs20.Filenotes.ViewModels;
-using System.Threading.Tasks;
+using Sbs20.Filenotes.Data;
+using Windows.UI.Popups;
 
 namespace Sbs20.Filenotes.Views
 {
@@ -28,6 +30,10 @@ namespace Sbs20.Filenotes.Views
         protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
+
+            this.MasterListView.IsEnabled = false;
+            await StorageManager.IsReady();
+            this.MasterListView.IsEnabled = true;
 
             await this.notes.LoadAsync();
 
@@ -100,7 +106,18 @@ namespace Sbs20.Filenotes.Views
                 this.selectedNote = (NoteViewModel)e.ClickedItem;
 
                 // Force a reload of the file in case it's changed in the background
-                await this.selectedNote.ReloadAsync();
+                try
+                {
+                    await this.selectedNote.ReloadAsync();
+                }
+                catch (InvalidOperationException ex)
+                {
+                    var dialog = new MessageDialog(ex.Message);
+                    await dialog.ShowAsync();
+                    await this.notes.LoadAsync();
+                    this.SelectMostAppropriateNote();
+                    return;
+                }
 
                 if (this.MasterListView.SelectedItems.Count == 1)
                 {

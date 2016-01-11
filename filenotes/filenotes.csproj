@@ -106,6 +106,7 @@
     <Compile Include="Controls\PageHeader.xaml.cs">
       <DependentUpon>PageHeader.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Data\Constants.cs" />
     <Compile Include="Data\INote.cs" />
     <Compile Include="Data\StorageManager.cs" />
     <Compile Include="Data\Settings.cs" />
