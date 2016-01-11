@@ -176,7 +176,7 @@ namespace Sbs20.Filenotes.Views
             var note = this.Note;
 
             // Rename
-            await StorageManager.RenameNoteAsync(note, desiredName);
+            note.Name = await StorageManager.RenameNoteAsync(note, desiredName);
         }
 
         private void PageHeader_DoubleTapped(object sender, DoubleTappedRoutedEventArgs e)

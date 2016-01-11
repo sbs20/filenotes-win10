@@ -29,7 +29,7 @@ namespace Sbs20.Filenotes.ViewModels
             set
             {
                 this.name = value;
-                this.OnPropertyChanged("Title");
+                this.OnPropertyChanged("Name");
             }
         }
 
