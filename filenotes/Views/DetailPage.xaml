@@ -62,6 +62,7 @@
             VerticalAlignment="Stretch"
             ScrollViewer.VerticalScrollBarVisibility="Auto"
             ScrollViewer.HorizontalScrollBarVisibility="Auto"
+            IsTextPredictionEnabled="False"
             AcceptsReturn="True"
             LostFocus="NoteTextBox_LostFocus"
             Text="{x:Bind Path=Note.Text, Mode=TwoWay, Converter={StaticResource NoopConverter}}">

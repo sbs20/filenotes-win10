@@ -97,6 +97,7 @@
                     VerticalAlignment="Stretch"
                     ScrollViewer.VerticalScrollBarVisibility="Auto"
                     ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                    IsTextPredictionEnabled="False"
                     AcceptsReturn="True"
                     LostFocus="NoteTextBox_LostFocus"
                     Text="{Binding Path=Text, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
