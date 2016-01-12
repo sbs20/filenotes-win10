@@ -46,11 +46,6 @@ namespace Sbs20.Filenotes.Data
             return await StorageApplicationPermissions.FutureAccessList.GetFolderAsync(LocalStorageDirectory);
         }
 
-        public static INote CreateNote()
-        {
-            return new ViewModels.Note();
-        }
-
         public static ApplicationTheme ApplicationTheme
         {
             get

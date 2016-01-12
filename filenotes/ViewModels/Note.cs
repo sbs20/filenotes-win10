@@ -6,7 +6,7 @@ using Windows.Globalization.DateTimeFormatting;
 
 namespace Sbs20.Filenotes.ViewModels
 {
-    public class Note : INotifyPropertyChanged, INote
+    public class Note : INotifyPropertyChanged
     {
         private string name;
         private string text;
@@ -88,29 +88,9 @@ namespace Sbs20.Filenotes.ViewModels
             get { return this.originalText != this.Text; }
         }
 
-        public async Task ReloadAsync()
+        public void Reset()
         {
-            var note = await StorageManager.LoadNoteAsync(this.Name);
-            if (note != null)
-            {
-                this.Text = note.Text;
-                this.DateModified = note.DateModified;
-            }
-            else
-            {
-                throw new InvalidOperationException(Constants.FileNotFoundException);
-            }
-        }
-
-        public async Task SaveAsync()
-        {
-            if (this.IsDirty)
-            {
-                var save = StorageManager.SaveNoteAsync(this);
-                this.originalText = this.Text;
-                await save;
-                this.DateModified = DateTime.Now;
-            }
+            this.originalText = this.text;
         }
     }
 }

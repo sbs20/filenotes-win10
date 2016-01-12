@@ -1,89 +1,46 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Windows.Storage;
-using Windows.Storage.FileProperties;
 
 namespace Sbs20.Filenotes.Data
 {
     public class StorageManager
     {
-        private static int busyStack = 0;
-
-        public static async Task IsReady()
+        public static async Task<IReadOnlyList<StorageFile>> LoadFilesAsync()
         {
-            while (busyStack > 0)
-            {
-                await Task.Delay(100);
-            }
-        }
-
-        public static async Task<IList<INote>> LoadNotesAsync()
-        {
-            busyStack++;
             var folder = await Settings.GetStorageFolderAsync();
             var files = await folder.GetFilesAsync();
-            var notes = files
-                .Select(async (f) =>
-                {
-                    INote note = Settings.CreateNote();
-                    note.DateCreated = f.DateCreated.LocalDateTime;
-                    BasicProperties properties = await f.GetBasicPropertiesAsync();
-                    note.DateModified = properties.DateModified.LocalDateTime;
-                    note.Name = f.Name;
-                    note.Text = await FileIO.ReadTextAsync(f);
-                    return note;
-                });
-
-            var list = new List<INote>(await Task.WhenAll(notes));
-            busyStack--;
-            return list;
+            return files;
         }
 
-        public static async Task<INote> LoadNoteAsync(string name)
+        public static async Task SaveFileAsync(string name, string data)
         {
-            busyStack++;
-            var notes = await LoadNotesAsync();
-            busyStack--;
-            return notes.Where(n => n.Name == name).FirstOrDefault();
-        }
-
-        public static async Task SaveNoteAsync(INote note)
-        {
-            busyStack++;
             var folder = await Settings.GetStorageFolderAsync();
-            StorageFile file = await folder.GetFileAsync(note.Name);
-            await FileIO.WriteTextAsync(file, note.Text);
-            busyStack--;
+            StorageFile file = await folder.GetFileAsync(name);
+            await FileIO.WriteTextAsync(file, data);
         }
 
-        public static async Task<string> CreateNoteAsync(INote note)
+        public static async Task<string> CreateFileAsync(string name, string data)
         {
-            busyStack++;
             var folder = await Settings.GetStorageFolderAsync();
-            var file = await folder.CreateFileAsync(note.Name, CreationCollisionOption.GenerateUniqueName);
-            await FileIO.WriteTextAsync(file, note.Text);
-            busyStack--;
+            var file = await folder.CreateFileAsync(name, CreationCollisionOption.GenerateUniqueName);
+            await FileIO.WriteTextAsync(file, data);
             return file.Name;
         }
 
-        public static async Task DeleteNoteAsync(INote note)
+        public static async Task DeleteFileAsync(string name)
         {
-            busyStack++;
             var folder = await Settings.GetStorageFolderAsync();
-            var file = await folder.GetFileAsync(note.Name);
+            var file = await folder.GetFileAsync(name);
             await file.DeleteAsync(StorageDeleteOption.Default);
-            busyStack--;
         }
 
-        public static async Task<string> RenameNoteAsync(INote note, string desiredName)
+        public static async Task<string> RenameFileAsync(string name, string desiredName)
         {
-            busyStack++;
             var folder = await Settings.GetStorageFolderAsync();
-            var file = await folder.GetFileAsync(note.Name);
+            var file = await folder.GetFileAsync(name);
             await file.RenameAsync(desiredName, NameCollisionOption.GenerateUniqueName);
-            busyStack--;
             return file.Name;
         }
     }

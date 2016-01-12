@@ -8,7 +8,6 @@ using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
 using Windows.System;
 using Windows.UI.Xaml.Input;
-using Sbs20.Filenotes.Data;
 using Sbs20.Filenotes.ViewModels;
 using Sbs20.Filenotes.Extensions;
 
@@ -39,8 +38,11 @@ namespace Sbs20.Filenotes.Views
         {
             base.OnNavigatedTo(e);
 
+            // Refresh data
+            await NoteAdapter.TryReadAllFromStorageAsync();
+
             // Parameter is the note's name
-            this.Note = await StorageManager.LoadNoteAsync((string)e.Parameter) as Note;
+            this.Note = NoteAdapter.Notes.GetByName((string)e.Parameter);
             
             var backStack = Frame.BackStack;
             var backStackCount = backStack.Count;
@@ -64,14 +66,14 @@ namespace Sbs20.Filenotes.Views
             SystemNavigationManager.GetForCurrentView().BackRequested += DetailPage_BackRequested;
         }
 
-        protected async override void OnNavigatedFrom(NavigationEventArgs e)
+        protected override async void OnNavigatedFrom(NavigationEventArgs e)
         {
             // Try and save first...
             // Under extreme navigation circumstances (mostly if you're switching adaptive states
             // very quickly) this.Note can be null... null is bad
             if (this.Note != null)
             {
-                await this.Note.SaveAsync();
+                await NoteAdapter.WriteToStorageAsync(this.Note);
             }
 
             // As you were
@@ -86,10 +88,16 @@ namespace Sbs20.Filenotes.Views
             Frame.GoBack(new DrillInNavigationTransitionInfo());
         }
 
-        void NavigateBackForWideState(bool useTransition)
+        private async void NavigateBackForWideState(bool useTransition)
         {
             // Evict this page from the cache as we may not need it again.
             NavigationCacheMode = NavigationCacheMode.Disabled;
+
+            // Save
+            if (this.Note != null)
+            {
+                await NoteAdapter.WriteToStorageAsync(this.Note);
+            }
 
             if (useTransition)
             {
@@ -176,7 +184,7 @@ namespace Sbs20.Filenotes.Views
             var note = this.Note;
 
             // Rename
-            note.Name = await StorageManager.RenameNoteAsync(note, desiredName);
+            await NoteAdapter.RenameNoteAsync(note, desiredName);
         }
 
         private void PageHeader_DoubleTapped(object sender, DoubleTappedRoutedEventArgs e)

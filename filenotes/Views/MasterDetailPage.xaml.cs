@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Windows.System;
+using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
@@ -10,8 +11,6 @@ using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
 using Sbs20.Filenotes.Extensions;
 using Sbs20.Filenotes.ViewModels;
-using Sbs20.Filenotes.Data;
-using Windows.UI.Popups;
 
 namespace Sbs20.Filenotes.Views
 {
@@ -23,7 +22,7 @@ namespace Sbs20.Filenotes.Views
         public MasterDetailPage()
         {
             this.InitializeComponent();
-            this.notes = new NoteCollection();
+            this.notes = NoteAdapter.Notes;
             this.MasterListView.ItemsSource = this.notes;
         }
 
@@ -31,25 +30,17 @@ namespace Sbs20.Filenotes.Views
         {
             base.OnNavigatedTo(e);
 
-            this.MasterListView.IsEnabled = false;
-            await StorageManager.IsReady();
-            this.MasterListView.IsEnabled = true;
-
-            await this.notes.LoadAsync();
+            await NoteAdapter.TryReadAllFromStorageAsync();
 
             if (e.Parameter != null)
             {
                 // Parameter is item name
-                var title = (string)e.Parameter;
-                this.selectedNote = this.notes
-                    .Where((item) => item.Name == title)
-                    .FirstOrDefault();
+                var name = (string)e.Parameter;
+                this.selectedNote = this.notes.GetByName(name);
             }
 
             this.SelectMostAppropriateNote();
-
             this.UpdateForVisualState(AdaptiveStates.CurrentState);
-
             VisualStateManager.GoToState(this, this.MasterState.Name, true);
 
             // Don't play a content transition for first item load.
@@ -107,16 +98,13 @@ namespace Sbs20.Filenotes.Views
                 {
                     this.selectedNote = (Note)e.ClickedItem;
 
-                    // Force a reload of the file in case it's changed in the background
-                    try
+                    // Force a reload of the files in case they've changed in the background
+                    await NoteAdapter.TryReadAllFromStorageAsync();
+
+                    if (!this.notes.Contains(this.selectedNote))
                     {
-                        await this.selectedNote.ReloadAsync();
-                    }
-                    catch (InvalidOperationException ex)
-                    {
-                        var dialog = new MessageDialog(ex.Message);
+                        var dialog = new MessageDialog(Data.Constants.FileNotFoundException);
                         await dialog.ShowAsync();
-                        await this.notes.LoadAsync();
                         this.SelectMostAppropriateNote();
                         return;
                     }
@@ -170,12 +158,12 @@ namespace Sbs20.Filenotes.Views
         private async void NoteTextBox_LostFocus(object sender, RoutedEventArgs e)
         {
             // Do saves
-            await this.notes.SaveAllAsync();
+            await NoteAdapter.WriteAllToStorageAsync();
         }
 
         private async void Add_Click(object sender, RoutedEventArgs e)
         {
-            await this.notes.CreateNote();
+            await NoteAdapter.CreateNoteAsync();
         }
 
         private async void Delete_Click(object sender, RoutedEventArgs e)
@@ -191,7 +179,7 @@ namespace Sbs20.Filenotes.Views
 
             foreach (var note in toBeDeleted)
             {
-                await this.notes.DeleteNote(note);
+                await NoteAdapter.DeleteNoteAsync(note);
             }
         }
 
@@ -219,7 +207,7 @@ namespace Sbs20.Filenotes.Views
             if (note.Name != desiredName)
             {
                 // Rename
-                await this.notes.RenameNote(note, desiredName);
+                await NoteAdapter.RenameNoteAsync(note, desiredName);
             }
 
             // Reenable the list view
@@ -285,7 +273,7 @@ namespace Sbs20.Filenotes.Views
 
         private async void Refresh_Click(object sender, RoutedEventArgs e)
         {
-            await this.notes.LoadAsync();
+            await NoteAdapter.TryReadAllFromStorageAsync();
             this.SelectMostAppropriateNote();
         }
     }
