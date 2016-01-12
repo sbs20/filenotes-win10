@@ -17,8 +17,21 @@ namespace Sbs20.Filenotes.Data
         public static async Task SaveFileAsync(string name, string data)
         {
             var folder = await Settings.GetStorageFolderAsync();
-            StorageFile file = await folder.GetFileAsync(name);
-            await FileIO.WriteTextAsync(file, data);
+
+            StorageFile file = null;
+            try
+            {
+                file = await folder.GetFileAsync(name);
+                await FileIO.WriteTextAsync(file, data);
+            }
+            catch (System.IO.FileNotFoundException)
+            {
+                // In order to get here, something has to have deleted the file in the background
+                // WHILE someone was editing. This is all a bit weird but it's better to save 
+                // someone's data and let them delete it again properly than to lose something or
+                // just crash
+                await CreateFileAsync(name, data);
+            }
         }
 
         public static async Task<string> CreateFileAsync(string name, string data)

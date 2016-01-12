@@ -28,8 +28,11 @@ namespace Sbs20.Filenotes.ViewModels
             get { return this.name; }
             set
             {
-                this.name = value;
-                this.OnPropertyChanged("Name");
+                if (this.name != value)
+                {
+                    this.name = value;
+                    this.OnPropertyChanged("Name");
+                }
             }
         }
 
@@ -38,11 +41,14 @@ namespace Sbs20.Filenotes.ViewModels
             get { return this.text; }
             set
             {
-                this.text = value;
-                this.OnPropertyChanged("Text");
-                if (this.originalText == null)
+                if (this.text != value)
                 {
-                    this.originalText = this.text;
+                    this.text = value;
+                    this.OnPropertyChanged("Text");
+                    if (this.originalText == null)
+                    {
+                        this.originalText = this.text;
+                    }
                 }
             }
         }

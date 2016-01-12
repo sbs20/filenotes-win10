@@ -15,8 +15,10 @@ namespace Sbs20.Filenotes.Views
 {
     public sealed partial class DetailPage : Page
     {
-        private static DependencyProperty s_noteProperty
-            = DependencyProperty.Register("Note", typeof(Note), typeof(DetailPage), new PropertyMetadata(null));
+        private static DependencyProperty s_noteProperty = DependencyProperty.Register("Note", 
+            typeof(Note), 
+            typeof(DetailPage), 
+            new PropertyMetadata(null));
 
         public static DependencyProperty NoteProperty
         {
@@ -34,16 +36,12 @@ namespace Sbs20.Filenotes.Views
             this.InitializeComponent();
         }
 
-        protected override async void OnNavigatedTo(NavigationEventArgs e)
+        protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
 
-            // Refresh data
-            await NoteAdapter.TryReadAllFromStorageAsync();
-
-            // Parameter is the note's name
-            this.Note = NoteAdapter.Notes.GetByName((string)e.Parameter);
-            
+            this.Note = e.Parameter as Note;
+                    
             var backStack = Frame.BackStack;
             var backStackCount = backStack.Count;
 
@@ -88,16 +86,13 @@ namespace Sbs20.Filenotes.Views
             Frame.GoBack(new DrillInNavigationTransitionInfo());
         }
 
-        private async void NavigateBackForWideState(bool useTransition)
+        private void NavigateBackForWideState(bool useTransition)
         {
             // Evict this page from the cache as we may not need it again.
             NavigationCacheMode = NavigationCacheMode.Disabled;
 
-            // Save
-            if (this.Note != null)
-            {
-                await NoteAdapter.WriteToStorageAsync(this.Note);
-            }
+            // Binding probably won't trigger - Force it
+            this.CopyTextBoxValueIntoNote();
 
             if (useTransition)
             {
@@ -213,6 +208,18 @@ namespace Sbs20.Filenotes.Views
             if (box.IsVisible())
             {
                 await this.RenameFinish();
+            }
+        }
+
+        /// <summary>
+        /// x:Bind does not support UpdateSourceTrigger so we might have to force a "bind" to occur
+        /// It's a bit miserable but at least it works
+        /// </summary>
+        private void CopyTextBoxValueIntoNote()
+        {
+            if (this.Note != null)
+            {
+                this.Note.Text = this.NoteTextBox.Text;
             }
         }
     }

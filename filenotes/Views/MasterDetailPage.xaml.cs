@@ -80,7 +80,7 @@ namespace Sbs20.Filenotes.Views
             if (isNarrow && oldState == this.DefaultState && selectedNote != null)
             {
                 // Resize down to the detail item. Don't play a transition.
-                Frame.Navigate(typeof(DetailPage), this.selectedNote.Name, new SuppressNavigationTransitionInfo());
+                Frame.Navigate(typeof(DetailPage), this.selectedNote, new SuppressNavigationTransitionInfo());
             }
 
             EntranceNavigationTransitionInfo.SetIsTargetElement(MasterListView, isNarrow);
@@ -114,7 +114,7 @@ namespace Sbs20.Filenotes.Views
                         if (AdaptiveStates.CurrentState == NarrowState)
                         {
                             // Use "drill in" transition for navigating from master list to detail view
-                            Frame.Navigate(typeof(DetailPage), this.selectedNote.Name, new DrillInNavigationTransitionInfo());
+                            Frame.Navigate(typeof(DetailPage), this.selectedNote, new DrillInNavigationTransitionInfo());
                         }
                         else
                         {
