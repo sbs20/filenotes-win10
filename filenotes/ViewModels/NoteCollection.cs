@@ -6,9 +6,9 @@ using Sbs20.Filenotes.Data;
 
 namespace Sbs20.Filenotes.ViewModels
 {
-    public class NoteCollectionViewModel : ObservableCollection<NoteViewModel>
+    public class NoteCollection : ObservableCollection<Note>
     {
-        public NoteCollectionViewModel()
+        public NoteCollection()
         {
         }
 
@@ -37,7 +37,7 @@ namespace Sbs20.Filenotes.ViewModels
             var notes = await StorageManager.LoadNotesAsync();
             foreach (var note in notes)
             {
-                this.Add(note as NoteViewModel);
+                this.Add(note as Note);
             }
         }
 
@@ -49,7 +49,7 @@ namespace Sbs20.Filenotes.ViewModels
             }
         }
 
-        private void InsertInOrder(NoteViewModel note)
+        private void InsertInOrder(Note note)
         {
             var firstNote = this.FirstOrDefault(nvm => nvm.Name.CompareTo(note.Name) > 0);
             if (firstNote == null)
@@ -66,7 +66,7 @@ namespace Sbs20.Filenotes.ViewModels
         public async Task CreateNote()
         {
             string name = this.CreateNewUniqueName();
-            var note = new NoteViewModel
+            var note = new Note
             {
                 DateCreated = DateTime.Now,
                 DateModified = DateTime.Now,
@@ -78,14 +78,14 @@ namespace Sbs20.Filenotes.ViewModels
             await StorageManager.CreateNoteAsync(note);
         }
 
-        public async Task RenameNote(NoteViewModel note, string desiredName)
+        public async Task RenameNote(Note note, string desiredName)
         {
             note.Name = await StorageManager.RenameNoteAsync(note, desiredName);
             this.Remove(note);
             this.InsertInOrder(note);
         }
     
-        public async Task DeleteNote(NoteViewModel note)
+        public async Task DeleteNote(Note note)
         {
             this.Remove(note);
             await StorageManager.DeleteNoteAsync(note);

@@ -6,7 +6,7 @@ using Windows.Globalization.DateTimeFormatting;
 
 namespace Sbs20.Filenotes.ViewModels
 {
-    public class NoteViewModel : INotifyPropertyChanged, INote
+    public class Note : INotifyPropertyChanged, INote
     {
         private string name;
         private string text;
@@ -60,7 +60,7 @@ namespace Sbs20.Filenotes.ViewModels
 
         public DateTime DateCreated { get; set; }
 
-        public NoteViewModel()
+        public Note()
         {
         }
 

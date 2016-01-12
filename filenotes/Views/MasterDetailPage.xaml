@@ -31,7 +31,7 @@
     </Page.BottomAppBar>
 
     <Page.Resources>
-        <DataTemplate x:Key="MasterListViewItemTemplate" x:DataType="viewmodels:NoteViewModel">
+        <DataTemplate x:Key="MasterListViewItemTemplate" x:DataType="viewmodels:Note">
             <Grid Margin="0,2,3,2">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
@@ -61,7 +61,7 @@
             </Grid>
         </DataTemplate>
 
-        <DataTemplate x:Key="DetailContentTemplate" x:DataType="viewmodels:NoteViewModel">
+        <DataTemplate x:Key="DetailContentTemplate" x:DataType="viewmodels:Note">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />

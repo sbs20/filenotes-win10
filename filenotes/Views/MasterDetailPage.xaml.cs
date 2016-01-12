@@ -17,13 +17,13 @@ namespace Sbs20.Filenotes.Views
 {
     public sealed partial class MasterDetailPage : Page
     {
-        private NoteViewModel selectedNote;
-        private NoteCollectionViewModel notes;
+        private Note selectedNote;
+        private NoteCollection notes;
 
         public MasterDetailPage()
         {
             this.InitializeComponent();
-            this.notes = new NoteCollectionViewModel();
+            this.notes = new NoteCollection();
             this.MasterListView.ItemsSource = this.notes;
         }
 
@@ -101,41 +101,49 @@ namespace Sbs20.Filenotes.Views
 
         private async void MasterListView_ItemClick(object sender, ItemClickEventArgs e)
         {
-            if (this.MasterDetailsStatesGroup.CurrentState != this.MultipleSelectionState)
+            try
             {
-                this.selectedNote = (NoteViewModel)e.ClickedItem;
+                if (this.MasterDetailsStatesGroup.CurrentState != this.MultipleSelectionState)
+                {
+                    this.selectedNote = (Note)e.ClickedItem;
 
-                // Force a reload of the file in case it's changed in the background
-                try
-                {
-                    await this.selectedNote.ReloadAsync();
-                }
-                catch (InvalidOperationException ex)
-                {
-                    var dialog = new MessageDialog(ex.Message);
-                    await dialog.ShowAsync();
-                    await this.notes.LoadAsync();
-                    this.SelectMostAppropriateNote();
-                    return;
-                }
-
-                if (this.MasterListView.SelectedItems.Count == 1)
-                {
-                    if (AdaptiveStates.CurrentState == NarrowState)
+                    // Force a reload of the file in case it's changed in the background
+                    try
                     {
-                        // Use "drill in" transition for navigating from master list to detail view
-                        Frame.Navigate(typeof(DetailPage), this.selectedNote.Name, new DrillInNavigationTransitionInfo());
+                        await this.selectedNote.ReloadAsync();
+                    }
+                    catch (InvalidOperationException ex)
+                    {
+                        var dialog = new MessageDialog(ex.Message);
+                        await dialog.ShowAsync();
+                        await this.notes.LoadAsync();
+                        this.SelectMostAppropriateNote();
+                        return;
+                    }
+
+                    if (this.MasterListView.SelectedItems.Count == 1)
+                    {
+                        if (AdaptiveStates.CurrentState == NarrowState)
+                        {
+                            // Use "drill in" transition for navigating from master list to detail view
+                            Frame.Navigate(typeof(DetailPage), this.selectedNote.Name, new DrillInNavigationTransitionInfo());
+                        }
+                        else
+                        {
+                            // Play a refresh animation when the user switches detail items.
+                            EnableContentTransitions();
+                        }
                     }
                     else
                     {
-                        // Play a refresh animation when the user switches detail items.
-                        EnableContentTransitions();
+
                     }
                 }
-                else
-                {
-
-                }
+            }
+            catch (Exception ex)
+            {
+                var dialog = new MessageDialog(ex.ToString());
+                await dialog.ShowAsync();
             }
         }
 
@@ -172,11 +180,11 @@ namespace Sbs20.Filenotes.Views
 
         private async void Delete_Click(object sender, RoutedEventArgs e)
         {
-            IList<NoteViewModel> toBeDeleted = new List<NoteViewModel>();
+            IList<Note> toBeDeleted = new List<Note>();
 
             // We have to make a temporary list of things to delete as doing so in the loop
             // will invalidate the IEnumerable
-            foreach (NoteViewModel note in this.MasterListView.SelectedItems)
+            foreach (Note note in this.MasterListView.SelectedItems)
             {
                 toBeDeleted.Add(note);
             }

@@ -17,16 +17,16 @@ namespace Sbs20.Filenotes.Views
     public sealed partial class DetailPage : Page
     {
         private static DependencyProperty s_noteProperty
-            = DependencyProperty.Register("Note", typeof(NoteViewModel), typeof(DetailPage), new PropertyMetadata(null));
+            = DependencyProperty.Register("Note", typeof(Note), typeof(DetailPage), new PropertyMetadata(null));
 
         public static DependencyProperty NoteProperty
         {
             get { return s_noteProperty; }
         }
 
-        public NoteViewModel Note
+        public Note Note
         {
-            get { return (NoteViewModel)GetValue(s_noteProperty); }
+            get { return (Note)GetValue(s_noteProperty); }
             set { SetValue(s_noteProperty, value); }
         }
 
@@ -40,7 +40,7 @@ namespace Sbs20.Filenotes.Views
             base.OnNavigatedTo(e);
 
             // Parameter is the note's name
-            this.Note = await StorageManager.LoadNoteAsync((string)e.Parameter) as NoteViewModel;
+            this.Note = await StorageManager.LoadNoteAsync((string)e.Parameter) as Note;
             
             var backStack = Frame.BackStack;
             var backStackCount = backStack.Count;

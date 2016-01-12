@@ -48,7 +48,7 @@ namespace Sbs20.Filenotes.Data
 
         public static INote CreateNote()
         {
-            return new ViewModels.NoteViewModel();
+            return new ViewModels.Note();
         }
 
         public static ApplicationTheme ApplicationTheme
