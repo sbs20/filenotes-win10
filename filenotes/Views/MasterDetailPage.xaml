@@ -97,9 +97,11 @@
                     VerticalAlignment="Stretch"
                     ScrollViewer.VerticalScrollBarVisibility="Auto"
                     ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                    LostFocus="NoteTextBox_LostFocus"
+                    PointerEntered="NoteTextBox_PointerEntered"
+                    PointerExited="NoteTextBox_PointerExited"
                     IsTextPredictionEnabled="False"
                     AcceptsReturn="True"
-                    LostFocus="NoteTextBox_LostFocus"
                     Text="{Binding Path=Text, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                 </TextBox>
             </Grid>
