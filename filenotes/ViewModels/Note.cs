@@ -45,10 +45,19 @@ namespace Sbs20.Filenotes.ViewModels
                 {
                     this.text = value;
                     this.OnPropertyChanged("Text");
-                    if (this.originalText == null)
-                    {
-                        this.originalText = this.text;
-                    }
+                }
+            }
+        }
+
+        private string OriginalText
+        {
+            get { return this.originalText; }
+            set
+            {
+                if (this.originalText != value)
+                {
+                    this.originalText = value;
+                    this.OnPropertyChanged("SizeString");
                 }
             }
         }
@@ -89,14 +98,46 @@ namespace Sbs20.Filenotes.ViewModels
             get { return this.DateModified.ToString("g"); }
         }
 
-        public bool IsDirty
+        public string SizeString
         {
-            get { return this.originalText != this.Text; }
+            get
+            {
+                // This isn't exactly correct - but to be honest, it's close enough for now
+                long size = this.originalText == null ? 0 : this.originalText.Length;
+                long kb = 1 << 10;
+                long mb = kb << 10;
+
+                if (size < 0)
+                {
+                    return "0";
+                }
+                else if (size == 1)
+                {
+                    return "1 Byte";
+                }
+                else if (size < kb << 1)
+                {
+                    return size + " Bytes";
+                }
+                else if (size < mb << 1)
+                {
+                    return ((int)(size / kb)) + " KB";
+                }
+                else
+                {
+                    return Math.Round(100.0 * size / mb) / 100.0 + " MB";
+                }
+            }
         }
 
-        public void Reset()
+        public bool IsDirty
         {
-            this.originalText = this.text;
+            get { return this.OriginalText != this.Text; }
+        }
+
+        public void MarkAsClean()
+        {
+            this.OriginalText = this.text;
         }
     }
 }

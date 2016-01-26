@@ -21,6 +21,7 @@ namespace Sbs20.Filenotes.ViewModels
             note.DateModified = properties.DateModified.LocalDateTime;
             note.Name = file.Name;
             note.Text = await FileIO.ReadTextAsync(file);
+            note.MarkAsClean();
         }
 
         public static async Task TryReadAllFromStorageAsync()
@@ -72,7 +73,7 @@ namespace Sbs20.Filenotes.ViewModels
             if (note.IsDirty)
             {
                 var save = StorageManager.SaveFileAsync(note.Name, note.Text);
-                note.Reset();
+                note.MarkAsClean();
                 await save;
                 note.DateModified = DateTime.Now;
             }

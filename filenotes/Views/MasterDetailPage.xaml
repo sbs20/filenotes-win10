@@ -43,20 +43,33 @@
                     <ColumnDefinition Width="100" />
                 </Grid.ColumnDefinitions>
 
-                <TextBlock Text="{x:Bind Name, Mode=OneWay}" Style="{ThemeResource BaseTextBlockStyle}"/>
+                <StackPanel Grid.RowSpan="2">
+                    <TextBlock 
+                        Text="{x:Bind Name, Mode=OneWay}" 
+                        FontSize="20"
+                        Style="{ThemeResource BaseTextBlockStyle}" />
 
-                <TextBlock
-                    Text="{x:Bind Text, Mode=OneWay}"
-                    Grid.Row="1"
-                    MaxLines="1"
-                    Style="{ThemeResource ListBodyTextBlockStyle}" />
+                    <TextBlock
+                        Text="{x:Bind Text, Mode=OneWay}"
+                        MaxLines="1"
+                        Style="{ThemeResource ListBodyTextBlockStyle}" />
+                </StackPanel>
 
                 <TextBlock
                     TextAlignment="Right"
                     Text="{x:Bind DateModifiedString, Mode=OneWay}"
+                    Grid.Row="0"
                     Grid.Column="1"
-                    Grid.RowSpan="2"
                     Margin="12,1,0,0"
+                    Style="{ThemeResource ListCaptionAltTextblockStyle}" />
+                
+                <TextBlock
+                    TextAlignment="Right"
+                    Text="{x:Bind SizeString, Mode=OneWay}"
+                    Grid.Row="1"
+                    Grid.Column="1"
+                    Margin="12,1,0,0"
+                    FontSize="10"
                     Style="{ThemeResource ListCaptionAltTextblockStyle}" />
             </Grid>
         </DataTemplate>
