@@ -46,7 +46,7 @@
                 <StackPanel Grid.RowSpan="2">
                     <TextBlock 
                         Text="{x:Bind Name, Mode=OneWay}" 
-                        FontSize="20"
+                        FontSize="18"
                         Style="{ThemeResource BaseTextBlockStyle}" />
 
                     <TextBlock
