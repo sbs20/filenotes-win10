@@ -54,6 +54,7 @@ namespace Sbs20.Filenotes.ViewModels
                     if (file == null)
                     {
                         Notes.RemoveAt(index);
+                        index--;
                     }
                 }
             }
