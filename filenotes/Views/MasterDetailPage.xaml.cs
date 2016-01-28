@@ -91,42 +91,45 @@ namespace Sbs20.Filenotes.Views
             }
         }
 
+        private async Task EditAsync(Note note)
+        {
+            this.selectedNote = note;
+
+            // Force a reload of the files in case they've changed in the background
+            await NoteAdapter.TryReadAllFromStorageAsync();
+
+            // Check the file still exists
+            if (!this.notes.Contains(this.selectedNote))
+            {
+                var dialog = new MessageDialog(Data.Constants.FileNotFoundException);
+                await dialog.ShowAsync();
+                this.SelectMostAppropriateNote();
+                return;
+            }
+
+            // We can only edit if there's only one selected
+            if (this.MasterListView.SelectedItems.Count == 1)
+            {
+                if (AdaptiveStates.CurrentState == NarrowState)
+                {
+                    // Use "drill in" transition for navigating from master list to detail view
+                    Frame.Navigate(typeof(DetailPage), this.selectedNote, new DrillInNavigationTransitionInfo());
+                }
+                else
+                {
+                    // Play a refresh animation when the user switches detail items.
+                    EnableContentTransitions();
+                }
+            }
+        }
+
         private async void MasterListView_ItemClick(object sender, ItemClickEventArgs e)
         {
             try
             {
                 if (this.MasterDetailsStatesGroup.CurrentState != this.MultipleSelectionState)
                 {
-                    this.selectedNote = (Note)e.ClickedItem;
-
-                    // Force a reload of the files in case they've changed in the background
-                    await NoteAdapter.TryReadAllFromStorageAsync();
-
-                    if (!this.notes.Contains(this.selectedNote))
-                    {
-                        var dialog = new MessageDialog(Data.Constants.FileNotFoundException);
-                        await dialog.ShowAsync();
-                        this.SelectMostAppropriateNote();
-                        return;
-                    }
-
-                    if (this.MasterListView.SelectedItems.Count == 1)
-                    {
-                        if (AdaptiveStates.CurrentState == NarrowState)
-                        {
-                            // Use "drill in" transition for navigating from master list to detail view
-                            Frame.Navigate(typeof(DetailPage), this.selectedNote, new DrillInNavigationTransitionInfo());
-                        }
-                        else
-                        {
-                            // Play a refresh animation when the user switches detail items.
-                            EnableContentTransitions();
-                        }
-                    }
-                    else
-                    {
-
-                    }
+                    await this.EditAsync(e.ClickedItem as Note);
                 }
             }
             catch (Exception ex)
@@ -164,7 +167,9 @@ namespace Sbs20.Filenotes.Views
 
         private async void Add_Click(object sender, RoutedEventArgs e)
         {
-            await NoteAdapter.CreateNoteAsync();
+            this.selectedNote = await NoteAdapter.CreateNoteAsync();
+            this.MasterListView.SelectedItem = this.selectedNote;
+            this.MasterListView.ScrollIntoView(this.selectedNote);
         }
 
         private async void Delete_Click(object sender, RoutedEventArgs e)

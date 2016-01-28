@@ -95,19 +95,18 @@ namespace Sbs20.Filenotes.ViewModels
 
         private static string CreateNewUniqueName()
         {
-            const string stem = "_New{0}.txt";
-            string attempt = string.Format(stem, "");
+            string attempt = string.Format(Constants.NewNoteNameStem, "");
             int i = 0;
             while (Notes.IsExistingName(attempt))
             {
                 ++i;
-                attempt = string.Format(stem, i);
+                attempt = string.Format(Constants.NewNoteNameStem, i);
             }
 
             return attempt;
         }
         
-        public static async Task CreateNoteAsync()
+        public static async Task<Note> CreateNoteAsync()
         {
             string name = CreateNewUniqueName();
             var note = new Note
@@ -120,6 +119,7 @@ namespace Sbs20.Filenotes.ViewModels
 
             Notes.InsertInOrder(note);
             await StorageManager.CreateFileAsync(note.Name, note.Text);
+            return note;
         }
     }
 }
