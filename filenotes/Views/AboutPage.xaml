@@ -29,7 +29,7 @@
                     Dropbox, GoogleDrive etc - to keep everything up to date.
                 </TextBlock>
 
-                <TextBlock Style="{ThemeResource SubtitleTextBlockStyle}" Margin="0, 10">Version 1.0</TextBlock>
+                <TextBlock Style="{ThemeResource SubtitleTextBlockStyle}" Margin="0, 10">License</TextBlock>
                 <TextBlock Style="{ThemeResource BodyTextBlockStyle}">This software is free to use
                     for business or personal use. It is open source and released under the GPL2 license.
                     Written and maintained by Sam Strachan, this is published by Code Seven Six
