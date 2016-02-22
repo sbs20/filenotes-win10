@@ -1,10 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Package xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10" xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest" xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10" IgnorableNamespaces="uap mp">
-  <Identity Name="codesevensix.filenotes" Publisher="CN=9ED237A9-6932-4594-BEC7-9DD8A616EABE" Version="1.0.0.0" />
+  <Identity Name="codesevensix.filenotes" Publisher="CN=9ED237A9-6932-4594-BEC7-9DD8A616EABE" Version="1.1.0.0" />
   <mp:PhoneIdentity PhoneProductId="a900cf3c-d4dd-4a31-ae57-ef4f27f63308" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
   <Properties>
     <DisplayName>Filenotes</DisplayName>
-    <PublisherDisplayName>Code Seven Six</PublisherDisplayName>
+    <PublisherDisplayName>code seven six</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>
   <Dependencies>
