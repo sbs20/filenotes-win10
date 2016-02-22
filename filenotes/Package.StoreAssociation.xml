@@ -360,7 +360,8 @@
   <ProductReservedInfo>
     <MainPackageIdentityName>codesevensix.filenotes</MainPackageIdentityName>
     <ReservedNames>
-      <ReservedName>filenotes</ReservedName>
+      <ReservedName>Filenotes</ReservedName>
+      <ReservedName>Filenote</ReservedName>
     </ReservedNames>
   </ProductReservedInfo>
   <AccountPackageIdentityNames />
