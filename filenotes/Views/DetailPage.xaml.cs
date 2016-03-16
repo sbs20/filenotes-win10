@@ -71,7 +71,7 @@ namespace Sbs20.Filenotes.Views
             // very quickly) this.Note can be null... null is bad
             if (this.Note != null)
             {
-                await NoteAdapter.WriteToStorageAsync(this.Note);
+                await NoteManager.WriteToStorageAsync(this.Note);
             }
 
             // As you were
@@ -179,7 +179,7 @@ namespace Sbs20.Filenotes.Views
             var note = this.Note;
 
             // Rename
-            await NoteAdapter.RenameNoteAsync(note, desiredName);
+            await NoteManager.RenameNoteAsync(note, desiredName);
         }
 
         private void PageHeader_DoubleTapped(object sender, DoubleTappedRoutedEventArgs e)
@@ -220,6 +220,15 @@ namespace Sbs20.Filenotes.Views
             if (this.Note != null)
             {
                 this.Note.Text = this.NoteTextBox.Text;
+            }
+        }
+
+        private async void SaveButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (this.Note != null)
+            {
+                this.CopyTextBoxValueIntoNote();
+                await NoteManager.WriteToStorageAsync(this.Note);
             }
         }
     }

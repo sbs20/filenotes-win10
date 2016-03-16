@@ -7,7 +7,7 @@ using Sbs20.Filenotes.Data;
 
 namespace Sbs20.Filenotes.ViewModels
 {
-    public static class NoteAdapter
+    public static class NoteManager
     {
         public static NoteCollection Notes
         {
@@ -65,7 +65,7 @@ namespace Sbs20.Filenotes.ViewModels
         {
             foreach (var note in Notes)
             {
-                await NoteAdapter.WriteToStorageAsync(note);
+                await NoteManager.WriteToStorageAsync(note);
             }
         }
 

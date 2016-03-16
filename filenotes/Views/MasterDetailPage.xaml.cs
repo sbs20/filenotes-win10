@@ -23,7 +23,7 @@ namespace Sbs20.Filenotes.Views
         public MasterDetailPage()
         {
             this.InitializeComponent();
-            this.notes = NoteAdapter.Notes;
+            this.notes = NoteManager.Notes;
             this.MasterListView.ItemsSource = this.notes;
         }
 
@@ -31,7 +31,7 @@ namespace Sbs20.Filenotes.Views
         {
             base.OnNavigatedTo(e);
 
-            await NoteAdapter.TryReadAllFromStorageAsync();
+            await NoteManager.TryReadAllFromStorageAsync();
 
             if (e.Parameter != null)
             {
@@ -96,7 +96,7 @@ namespace Sbs20.Filenotes.Views
             this.selectedNote = note;
 
             // Force a reload of the files in case they've changed in the background
-            await NoteAdapter.TryReadAllFromStorageAsync();
+            await NoteManager.TryReadAllFromStorageAsync();
 
             // Check the file still exists
             if (!this.notes.Contains(this.selectedNote))
@@ -162,12 +162,12 @@ namespace Sbs20.Filenotes.Views
         private async void NoteTextBox_LostFocus(object sender, RoutedEventArgs e)
         {
             // Do saves
-            await NoteAdapter.WriteAllToStorageAsync();
+            await NoteManager.WriteAllToStorageAsync();
         }
 
         private async void Add_Click(object sender, RoutedEventArgs e)
         {
-            this.selectedNote = await NoteAdapter.CreateNoteAsync();
+            this.selectedNote = await NoteManager.CreateNoteAsync();
             this.MasterListView.SelectedItem = this.selectedNote;
             this.MasterListView.ScrollIntoView(this.selectedNote);
         }
@@ -185,7 +185,7 @@ namespace Sbs20.Filenotes.Views
 
             foreach (var note in toBeDeleted)
             {
-                await NoteAdapter.DeleteNoteAsync(note);
+                await NoteManager.DeleteNoteAsync(note);
             }
         }
 
@@ -213,7 +213,7 @@ namespace Sbs20.Filenotes.Views
             if (note.Name != desiredName)
             {
                 // Rename
-                await NoteAdapter.RenameNoteAsync(note, desiredName);
+                await NoteManager.RenameNoteAsync(note, desiredName);
             }
 
             // Reenable the list view
@@ -279,7 +279,7 @@ namespace Sbs20.Filenotes.Views
 
         private async void Refresh_Click(object sender, RoutedEventArgs e)
         {
-            await NoteAdapter.TryReadAllFromStorageAsync();
+            await NoteManager.TryReadAllFromStorageAsync();
             this.SelectMostAppropriateNote();
         }
 
@@ -291,6 +291,14 @@ namespace Sbs20.Filenotes.Views
         private void NoteTextBox_PointerExited(object sender, PointerRoutedEventArgs e)
         {
             Window.Current.CoreWindow.PointerCursor = new CoreCursor(CoreCursorType.Arrow, 0);
+        }
+
+        private async void SaveButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (this.selectedNote != null)
+            {
+                await NoteManager.WriteAllToStorageAsync();
+            }
         }
     }
 }

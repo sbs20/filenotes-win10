@@ -87,7 +87,12 @@
 
                 <c:PageHeader x:Name="PageHeader" Grid.Row="0" DoubleTapped="PageHeader_DoubleTapped">
                     <c:PageHeader.HeaderContent>
-                        <TextBlock x:Name="title" Style="{ThemeResource PageTitleTextBlockStyle}" Text="{x:Bind Name, Mode=OneWay}"/>
+                        <CommandBar VerticalAlignment="Top" HorizontalContentAlignment="Stretch">
+                            <CommandBar.Content>
+                                <TextBlock x:Name="title" Style="{ThemeResource PageTitleTextBlockStyle}" Text="{x:Bind Name, Mode=OneWay}"/>
+                            </CommandBar.Content>
+                            <AppBarButton Name="SaveButton" Icon="Save" Label="Save" Click="SaveButton_Click" />
+                        </CommandBar>
                     </c:PageHeader.HeaderContent>
                 </c:PageHeader>
 
