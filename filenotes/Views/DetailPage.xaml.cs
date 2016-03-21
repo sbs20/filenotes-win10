@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using Windows.UI.Core;
 using Windows.UI.Xaml;
@@ -230,6 +229,11 @@ namespace Sbs20.Filenotes.Views
                 this.CopyTextBoxValueIntoNote();
                 await NoteManager.WriteToStorageAsync(this.Note);
             }
+        }
+
+        private void RenameButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.RenameStart();
         }
     }
 }

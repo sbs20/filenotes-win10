@@ -82,9 +82,15 @@ namespace Sbs20.Filenotes.ViewModels
 
         public static async Task RenameNoteAsync(Note note, string desiredName)
         {
-            note.Name = await StorageManager.RenameFileAsync(note.Name, desiredName);;
-            Notes.Remove(note as Note);
-            Notes.InsertInOrder(note as Note);
+            // It's possible that desiredName is null or empty. It's no big deal... just don't
+            // do anything
+            try
+            {
+                note.Name = await StorageManager.RenameFileAsync(note.Name, desiredName); ;
+                Notes.Remove(note as Note);
+                Notes.InsertInOrder(note as Note);
+            }
+            catch { }
         }
 
         public static async Task DeleteNoteAsync(Note note)

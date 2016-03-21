@@ -9,41 +9,45 @@ namespace Sbs20.Filenotes.Data
 {
     public class Settings
     {
-        private const string LocalStorageDirectory = "LocalStorageDirectory";
+        private const string SettingLocalStorageDirectory = "LocalStorageDirectory";
+        private const string SettingIsSaveButtonVisible = "IsSaveButtonVisible";
+
+        public static void ClearLocalFileReference()
+        {
+            if (StorageApplicationPermissions.FutureAccessList.ContainsItem(SettingLocalStorageDirectory))
+            {
+                StorageApplicationPermissions.FutureAccessList.Remove(SettingLocalStorageDirectory);
+            }
+        }
 
         public static async Task SelectLocalDirectoryAsync()
         {
-            var fp = new FolderPicker()
+            var folderPicker = new FolderPicker()
             {
                 SuggestedStartLocation = PickerLocationId.DocumentsLibrary
             };
 
-            fp.FileTypeFilter.Add("*");
+            folderPicker.FileTypeFilter.Add("*");
+            var folder = await folderPicker.PickSingleFolderAsync();
 
-            while (true)
+            if (folder != null)
             {
-                var folder = await fp.PickSingleFolderAsync();
-
-                if (folder != null)
-                {
-                    StorageApplicationPermissions.FutureAccessList.AddOrReplace(LocalStorageDirectory, folder);
-                }
-
-                if (StorageApplicationPermissions.FutureAccessList.ContainsItem(LocalStorageDirectory))
-                {
-                    break;
-                }
+                StorageApplicationPermissions.FutureAccessList.AddOrReplace(SettingLocalStorageDirectory, folder);
             }
         }
 
         public static async Task<StorageFolder> GetStorageFolderAsync()
         {
-            if (!StorageApplicationPermissions.FutureAccessList.ContainsItem(LocalStorageDirectory))
+            if (StorageApplicationPermissions.FutureAccessList.ContainsItem(SettingLocalStorageDirectory))
             {
-                await SelectLocalDirectoryAsync();
+                try
+                {
+                    return await StorageApplicationPermissions.FutureAccessList.GetFolderAsync(SettingLocalStorageDirectory);
+                }
+                catch { }
             }
 
-            return await StorageApplicationPermissions.FutureAccessList.GetFolderAsync(LocalStorageDirectory);
+            return null;
         }
 
         public static ApplicationTheme ApplicationTheme
@@ -61,6 +65,17 @@ namespace Sbs20.Filenotes.Data
             {
                 ApplicationData.Current.LocalSettings.Values["IsLightTheme"] = value == ApplicationTheme.Light;
             }
+        }
+
+        private static object get(string key, object def)
+        {
+            return ApplicationData.Current.LocalSettings.Values[key] ?? def;
+        }
+
+        public static bool IsSaveButtonVisible
+        {
+            get { return Convert.ToBoolean(get(SettingIsSaveButtonVisible, false)); }
+            set { ApplicationData.Current.LocalSettings.Values[SettingIsSaveButtonVisible] = value; }
         }
     }
 }

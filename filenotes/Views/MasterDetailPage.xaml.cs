@@ -12,6 +12,7 @@ using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
 using Sbs20.Filenotes.Extensions;
 using Sbs20.Filenotes.ViewModels;
+using Sbs20.Filenotes.Data;
 
 namespace Sbs20.Filenotes.Views
 {
@@ -31,22 +32,35 @@ namespace Sbs20.Filenotes.Views
         {
             base.OnNavigatedTo(e);
 
-            await NoteManager.TryReadAllFromStorageAsync();
+            bool isFolderSet = await Settings.GetStorageFolderAsync() != null;
 
-            if (e.Parameter != null)
+            if (isFolderSet)
             {
-                // Parameter is item name
-                var name = (string)e.Parameter;
-                this.selectedNote = this.notes.GetByName(name);
+                this.Message.Visibility = Visibility.Collapsed;
+                await NoteManager.TryReadAllFromStorageAsync();
+
+                if (e.Parameter != null)
+                {
+                    // Parameter is item name
+                    var name = (string)e.Parameter;
+                    this.selectedNote = this.notes.GetByName(name);
+                }
+
+                this.SelectMostAppropriateNote();
+                this.UpdateForVisualState(AdaptiveStates.CurrentState);
+                VisualStateManager.GoToState(this, this.MasterState.Name, true);
+
+                // Don't play a content transition for first item load.
+                // Sometimes, this content will be animated as part of the page transition.
+                this.DisableContentTransitions();
+
+                VisualStateManager.GoToState(this, this.MasterState.Name, true);
             }
-
-            this.SelectMostAppropriateNote();
-            this.UpdateForVisualState(AdaptiveStates.CurrentState);
-            VisualStateManager.GoToState(this, this.MasterState.Name, true);
-
-            // Don't play a content transition for first item load.
-            // Sometimes, this content will be animated as part of the page transition.
-            this.DisableContentTransitions();
+            else
+            {
+                this.Message.Visibility = Visibility.Visible;
+                VisualStateManager.GoToState(this, this.NoFolderState.Name, true);
+            }
         }
 
         private void SelectMostAppropriateNote()
@@ -299,6 +313,11 @@ namespace Sbs20.Filenotes.Views
             {
                 await NoteManager.WriteAllToStorageAsync();
             }
+        }
+
+        private void RenameButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.RenameStart();
         }
     }
 }

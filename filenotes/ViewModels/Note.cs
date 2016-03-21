@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Threading.Tasks;
 using Sbs20.Filenotes.Data;
 using Windows.Globalization.DateTimeFormatting;
+using Windows.UI.Xaml;
 
 namespace Sbs20.Filenotes.ViewModels
 {
@@ -138,6 +139,11 @@ namespace Sbs20.Filenotes.ViewModels
         public void MarkAsClean()
         {
             this.OriginalText = this.text;
+        }
+
+        public Visibility SaveButtonVisibility
+        {
+            get { return Settings.IsSaveButtonVisible ? Visibility.Visible : Visibility.Collapsed; }
         }
     }
 }

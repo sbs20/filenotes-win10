@@ -38,7 +38,16 @@
                     <CommandBar.Content>
                         <TextBlock Text="{x:Bind Note.Name, Mode=OneWay}" Style="{ThemeResource PageTitleTextBlockStyle}"/>
                     </CommandBar.Content>
-                    <AppBarButton Name="SaveButton" Icon="Save" Label="Save" Click="SaveButton_Click" />
+                    <AppBarButton 
+                        Name="SaveButton" 
+                        Icon="Save" 
+                        Label="Save" 
+                        Visibility="{x:Bind Note.SaveButtonVisibility, Mode=OneWay}"
+                        Click="SaveButton_Click" />
+                    <AppBarButton 
+                        Icon="Rename" 
+                        Label="Rename" 
+                        Click="RenameButton_Click" />
                     <AppBarButton Name="BackButton" Icon="Back" Label="Back" Click="BackButton_Click" />
                 </CommandBar>
             </c:PageHeader.HeaderContent>

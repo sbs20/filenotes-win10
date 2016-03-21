@@ -24,14 +24,28 @@
             <StackPanel >
                 <TextBlock Style="{ThemeResource SubtitleTextBlockStyle}" Margin="0, 10">Storage location</TextBlock>
                 <TextBlock Style="{ThemeResource BodyTextBlockStyle}">This is where your files are stored.</TextBlock>
-                <Button Name="ChangeStorageLocation" Click="ChangeStorageLocation_Click">Change Storage Location</Button>
-                <TextBlock Style="{ThemeResource SubtitleTextBlockStyle}" Margin="0, 10">Themes</TextBlock>
+
+                <StackPanel Orientation="Horizontal">
+                    <Button Name="ChangeStorageLocation" Click="ChangeStorageLocation_Click">Change Storage Location</Button>
+                    <TextBlock>&#160;</TextBlock>
+                    <Button Name="ClearStorageLocation" Click="ClearStorageLocation_Click" >Clear</Button>
+                </StackPanel>
+                
+                <TextBlock Style="{ThemeResource SubtitleTextBlockStyle}" Margin="0, 10">UI settings</TextBlock>
                 <ToggleSwitch
                     x:Name="DarkThemeToggle" 
                     Header="Dark theme" 
                     HorizontalAlignment="Stretch"
                     VerticalAlignment="Stretch"
                     Toggled="DarkThemeToggle_Toggled"/>
+
+                <ToggleSwitch
+                    x:Name="SaveButtonVisibleToggle" 
+                    Header="Is save button visible" 
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch"
+                    Toggled="SaveButtonVisibleToggle_Toggled"/>
+
             </StackPanel>
         </ScrollViewer>
 

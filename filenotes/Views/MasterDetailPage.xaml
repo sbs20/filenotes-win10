@@ -91,7 +91,16 @@
                             <CommandBar.Content>
                                 <TextBlock x:Name="title" Style="{ThemeResource PageTitleTextBlockStyle}" Text="{x:Bind Name, Mode=OneWay}"/>
                             </CommandBar.Content>
-                            <AppBarButton Name="SaveButton" Icon="Save" Label="Save" Click="SaveButton_Click" />
+                            <AppBarButton 
+                                Name="SaveButton" 
+                                Icon="Save" 
+                                Label="Save" 
+                                Visibility="{x:Bind SaveButtonVisibility, Mode=OneWay}"
+                                Click="SaveButton_Click" />
+                            <AppBarButton 
+                                Icon="Rename" 
+                                Label="Rename" 
+                                Click="RenameButton_Click" />
                         </CommandBar>
                     </c:PageHeader.HeaderContent>
                 </c:PageHeader>
@@ -177,6 +186,20 @@
                         <!--#endregion-->
                     </VisualState.Setters>
                 </VisualState>
+                <VisualState x:Name="NoFolderState">
+                    <VisualState.Setters>
+                        <Setter Target="MasterListView.SelectionMode" Value="Single" />
+                        <Setter Target="MasterListView.IsItemClickEnabled" Value="False" />
+                        <Setter Target="DetailContentPresenter.Visibility" Value="Collapsed" />
+                        <!--#region App Bar Commands-->
+                        <Setter Target="Multiselect.Visibility" Value="Collapsed" />
+                        <Setter Target="Add.Visibility" Value="Collapsed" />
+                        <Setter Target="Refresh.Visibility" Value="Collapsed" />
+                        <Setter Target="Delete.Visibility" Value="Collapsed" />
+                        <Setter Target="CancelMultiselect.Visibility" Value="Collapsed" />
+                        <!--#endregion-->
+                    </VisualState.Setters>
+                </VisualState>
             </VisualStateGroup>
         </VisualStateManager.VisualStateGroups>
 
@@ -195,6 +218,13 @@
                 <TextBlock Text="Notes" Style="{ThemeResource PageTitleTextBlockStyle}"/>
             </c:PageHeader.HeaderContent>
         </c:PageHeader>
+
+        <TextBlock
+            Grid.Row="1"
+            Margin="10,10,10,10"
+            Name="Message">
+            You need to select a storage folder in settings.
+        </TextBlock>
 
         <ListView
             x:Name="MasterListView"
