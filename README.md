@@ -4,6 +4,8 @@ A simple text note editor for Windows 10 using UWP
 
 Filenotes is an app designed for simple note taking. It has no closed or proprietary formats, no lock-in and is compatible with any device which supports text files. You are free to use software such as Dropbox, OneDrive or GoogleDrive to sync files with your cloud provider of choice. Filenotes is also available on Android
 
+![Screenshot](https://github.com/sbs20/filenotes-win10/raw/master/img/screen0.png)
+
 ## Features
  *	Simple universal design – no pretending to be an actual yellow notepad
  *	Light and dark themes
